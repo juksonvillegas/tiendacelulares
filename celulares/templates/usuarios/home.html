@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	{% extends "base.html"%}
+	{% load static from staticfiles %}
+	<title>{% block title %}Bienvenido{% endblock %}</title>
+</head>
+<body>
+	{%block content%}
+	{% csrf_token %}
+	<div class="slider">
+		<ul class="slides">
+				<li>
+					<img src="{% static 'img/negocio1.jpg' %}" alt="">
+					<div class="caption center-align">
+						<h3>La mejor opción para hacer crecer tu negocio</h3>
+					</div>
+				</li>
+				<li>
+					<img src="{% static 'img/negocio2.jpg' %}" alt="">
+					<div class="caption center-align">
+						<h3>No avances a ciegas</h3>
+					</div>
+				</li>
+				<li>
+					<img src="{% static 'img/negocio3.jpg' %}" alt="">
+					<div class="caption center-align">
+						<h3>No arriesgues tu futuro</h3>
+					</div>
+				</li>
+				<li>
+					<img src="{% static 'img/negocio4.jpg' %}" alt="">
+					<div class="caption center-align">
+						<h3>Crece, crece y crece!!</h3>
+					</div>
+				</li>
+		</ul>
+	</div>
+	{%endblock%}
+	{% block script %}
+		$(document).ready(function(){
+			$('.slider').slider();
+		});
+	{% endblock %}
+</body>
+</html>

@@ -1,0 +1,65 @@
+{% extends "base.html"%}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>{% block title%}Buscar Precios{%endblock%}</title>
+</head>
+<body>
+	{% block titulo1 %}Buscar Precios{% endblock %}
+	{% block titulo %}Buscar Precios{% endblock %}
+	{%block contenido%}
+	{% csrf_token %}
+	<div class="row">
+		<form action="">
+			<table>
+				<tbody>
+					<tr>
+						<td>
+							<nav>
+    							<div class="nav-wrapper blue-grey">
+      								<form>
+	        							<div class="input-field">
+	          								<input id="texto" type="search" required placeholder="Buscar">
+	          								<label for="search"><i class="material-icons">search</i></label>
+	          								<i class="material-icons">close</i>
+	        							</div>
+      								</form>
+    							</div>
+ 							</nav>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
+	</div>
+	<div id="tabla">
+	</div>
+	{%endblock%}
+	{% block script%}
+		$('#texto').keyup(function(){
+			var texto = $('#texto').val();
+			if(texto.length > 1){
+				$.ajax({
+					data: {'term':texto},
+					url: "/precios/buscar-ajax",
+					type: "get",				
+					success: function(data){
+						var cabecera, footer;
+						var filas='';
+						cabecera = '<table class="responsive-table striped"><thead><tr><th data-field="descripcion">Descripcion</th><th data-field="punto">Punto de venta</th><th data-field="cliente">Cliente</th></tr></thead><tbody>';
+						footer = '</tbody></table>';
+						for(var i = 0; i<data.length; i++){
+							filas+='<tr><td>'+data[i].descripcion + 
+							'</td><td>'+data[i].punto + 
+							'</td><td>'+data[i].cliente + 
+							'</td></tr>';
+						}
+						$('#tabla').html(cabecera+filas+footer);
+					}
+				});
+			}
+		});
+	{% endblock %}
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	{% extends "base.html"%}
+	{% load static from staticfiles %}
+	<title>{% block title %}Agregar Preventas{% endblock %}</title>
+</head>
+<body>
+	{% block titulo1 %}Preventas{% endblock %}
+	{% block titulo %}Preventas{% endblock %}
+	{%block contenido%}
+	<div class="row">
+		<form action="" class="col l10 offset-l1" method="POST" id="preventa-form">
+			{% csrf_token %}
+			<div class="row col s12 m8 offset-m2 l12">
+				<div class="input-field">
+					<i class="material-icons prefix">search</i>
+					<input id="cliente" type="text" class="validate">
+          			<label for="cliente">Selccionar cliente</label>	
+				</div>
+				<div class="row">
+					<input type="hidden" id="idcliente" name="idcliente" value="">
+				</div>
+			</div>
+			<div class="row col s12 m8 offset-m2 l8">
+				<div class="input-field">
+					<i class="material-icons prefix">search</i>
+					<input id="producto" type="text" class="validate">
+          			<label for="producto">Seleccionar producto</label>	
+				</div>
+				<div class="row">
+					<input type="hidden" id="idproducto" name="idproducto" value="">
+				</div>
+			</div>
+			<div class="row col s4 m4 offset-m2 l3">
+				<div class="input-field ">
+					<i class="material-icons prefix">visibility</i>
+					<input  id="cantidad" name="cantidad" type="number" min="1" max="99" class="
+					validate left-align">
+					<label for="cantidad"> Cantidad</label>
+				</div>
+			</div>
+			<div class="col l1">
+				<a onClick="agregar_item(); return false;" class="btn-floating green btn-large"><i class="material-icons">add</i></a>
+			</div>
+			<div class="col l12 m10 offset-m2 s12">
+				<table id="items"class="responsive-table striped">
+				<thead>
+					<tr>
+						<th data-field="ID">ID</th>
+						<th data-field="Producto">Producto</th>
+						<th data-field="Cantidad">Cantidad</th>
+						<th data-field="eliminar">Eliminar</th>
+					</tr>
+				</thead>
+				<tbody>
+				<tr></tr>
+				</tbody>
+				</table>
+			</div>
+			<div class="row col l4 offset-l8 m4 offset-m6 s10 offset-s2">
+				<button class="btn teal darken-4 waves-effect waves-light right " type="submit" name="action">Guardar<i class="material-icons right">send</i></button>
+			</div>
+		</form>
+	</div>
+	{%endblock%}
+	{% block otroscript %}
+		<!--<script src="{% static 'js/jquery-ui.min.js' %}">-->
+	{% endblock %}
+	{% block script %}
+		$(document).ready(function(e){
+			$('#cliente').focus();
+		});
+
+		$('#cantidad').keypress(function(e){
+			if (e.which == 43){
+				agregar_item();
+				e.preventDefault();
+			};
+		});
+
+		$('#preventa-form').on('submit', function(event){
+   			event.preventDefault();
+    		//agregar_preventa();
+		});
+
+		function agregar_item(){
+			if($('#producto').val() !='' && $('#cantidad').val() != ''){
+				$('#items tr:last').after('<tr><td>' + $('#idproducto').val()
+				 + '</td><td>' + $('#producto').val() 
+				 + '</td><td>'+ $('#cantidad').val() 
+				 + '</td><td> <a id="borrar" onClick="eliminar_item(); return false;" class="btn-floating red"><i class="material-icons medium">delete</i></a></td></tr>');
+				$('#producto').val("");
+				$('#idproducto').val("");
+				$('#cantidad').val("");
+				$('#producto').focus();
+			}
+			else
+			{
+				Materialize.toast('Debe ingresar un producto y una cantidad!', 7000);
+			}
+		};
+
+		function eliminar_item(){
+			$('#borrar').parent().parent().remove();
+		};
+
+		function agregar_preventa(){
+			$.ajax({
+				url : "agregar-ajax",
+				type : "POST",
+				data : {'cliente':$('#idcliente').val(), 'producto':$('#idproducto').val(), 'cantidad':$('#cantidad').val()}, 
+				success: function(respuesta){
+					if(respuesta == 'Preventa registrada correctamente.')
+					{
+						$('#preventa-form')[0].reset();
+						$('#cliente').focus();
+					}
+					Materialize.toast(respuesta, 7000);
+				}
+			});
+		};	
+
+		$('#cliente').keyup(function() {
+			var $cliente = $('#cliente');
+  			$cliente.autocomplete({
+    			source: "/clientes/buscar-ajax2",
+    			minLength: 2,
+    			select: function (event, ui) {
+        			$("#idcliente").val(ui.item.id); 
+    			}
+  			});
+		});
+		
+		$('#producto').keyup(function() {
+			var $producto = $('#producto');
+  			$producto.autocomplete({
+    			source: "/productos/buscar-ajax2",
+    			minLength: 2,
+    			select: function (event, ui) {
+        			$("#idproducto").val(ui.item.id); 
+    			}
+  			});
+		});
+	{% endblock %}
+</body>
+</html>

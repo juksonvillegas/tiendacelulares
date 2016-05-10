@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+<head>
+	<meta charset="UTF-8">
+	<title>{% block title %}{% endblock %}</title>
+	{% load static from staticfiles %}
+	<link type="text/css" rel="stylesheet" href="{% static 'css/materialize.min.css' %}"  media="screen,projection"/>
+	<link type="text/css" rel="stylesheet" href="{% static 'css/style.css' %}"  media="screen,projection"/>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+	<!--Menu principal-->
+	<ul id="slide-out" class="side-nav fixed grey lighten-3">
+		<li class="no-padding">
+			<ul class="collapsible collapsible-accordion">
+				<li><a href="/logout/" class="waves-effect waves-light btn right red lighten-3 z-depth-1"><i class="tiny material-icons">power_settings_new</i></a></li>
+				<li>
+					<a class="collapsible-header">{{ request.user }} <i class="mdi-navigation-arrow-drop-down"></i></a>
+					<div class="collapsible-body">
+						<ul>
+							<li class="center"><img src={{ request.user.foto }} class="circle"></li>
+							<li class="center" >
+								{% if request.user.is_staff %}
+									Administrador
+								{% else %}
+									Vendedor
+								{% endif %}
+							</li>
+						</ul>
+					</div>
+
+				</li>
+
+			</ul>
+		</li>
+		<li class="divider"></li>
+		<li>
+			<li class="no-padding">
+			<ul class="collapsible collapsible-accordrion">
+				<li>
+					<a class="collapsible-header">Consignaciones <i class="mdi-navigation-arrow-drop-down"></i></a>
+					<div class="collapsible-body">
+						<ul>
+							<li><a href="/consignaciones/buscar">Buscar</a></li>
+							<li><a href="/consignaciones/agregar">Agregar</a></li>
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</li>
+		</li>
+		<li>
+			<li class="no-padding">
+			<ul class="collapsible collapsible-accordrion">
+				<li>
+					<a class="collapsible-header">Ventas <i class="mdi-navigation-arrow-drop-down"></i></a>
+					<div class="collapsible-body">
+						<ul>
+							<li><a href="/ventas/buscar">Buscar</a></li>
+							<li><a href="/ventas/agregar">Agregar</a></li>
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</li>
+		<li><a href="#">Compras</a></li>
+		<li class="divider"></li>
+		<li class="no-padding">
+			<ul class="collapsible collapsible-accordrion">
+				<li>
+					<a class="collapsible-header">Productos <i class="mdi-navigation-arrow-drop-down"></i></a>
+					<div class="collapsible-body">
+						<ul>
+							<li><a href="/productos/buscar">Buscar</a></li>
+							<li><a href="/productos/agregar">Agregar</a></li>
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</li>
+		<li class="no-padding">
+			<ul class="collapsible collapsible-accordrion">
+				<li>
+					<a class="collapsible-header">Categorias <i class="mdi-navigation-arrow-drop-down"></i></a>
+						<div class="collapsible-body">
+							<ul>
+								<li><a href="/categorias/buscar">Buscar</a></li>
+								<li><a href="/categorias/agregar">Agregar</a></li>
+							</ul>
+						</div>
+				</li>
+			</ul>
+		</li>
+		<li class="no-padding">
+			<ul class="collapsible collapsible-accordrion">
+				<li>
+					<a class="collapsible-header">Precios <i class="mdi-navigation-arrow-drop-down"></i></a>
+						<div class="collapsible-body">
+							<ul>
+								<li><a href="/precios/buscar">Buscar</a></li>
+								<li><a href="/precios/agregar">Agregar</a></li>
+							</ul>
+						</div>
+				</li>
+			</ul>
+		</li>
+		<li class="no-padding">
+			<ul class="collapsible collapsible-accordrion">
+				<li>
+					<a class="collapsible-header">Clientes <i class="mdi-navigation-arrow-drop-down"></i></a>
+					<div class="collapsible-body">
+						<ul>
+							<li><a href="/clientes/buscar">Buscar</a></li>
+							<li><a href="/clientes/agregar">Agregar</a></li>
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</li>
+		<li class="no-padding">
+			<ul class="collapsible collapsible-accordrion">
+				<li>
+					<a class="collapsible-header">Proveedores <i class="mdi-navigation-arrow-drop-down"></i></a>
+					<div class="collapsible-body">
+						<ul>
+							<li><a href="/proveedores/buscar">Buscar</a></li>
+							<li><a href="/proveedores/agregar">Agregar</a></li>
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</li>
+		<li class="divider"></li>
+		<li><a href="#">Gastos y pagos</a></li>
+		<li><a href="#">Otros ingresos</a></li>
+		<li><a href="#">Notas</a></li>
+		<li class="divider"></li>
+	</ul>
+	<div class="blue-grey valign-wrapper" >
+		<a href="#" data-activates="slide-out" class="button-collapse white-text hoverable"><i class="medium mdi-navigation-menu hide-on-large-only"></i></a>
+		<h4 class=" grey-text darken-3 hide-on-large-only" >{% block titulo1 %}{% endblock %}</h4>
+	</div>
+
+	<div class="navbar-fixed hide-on-med-and-down">
+    <nav>
+      <div class="nav-wrapper blue-grey">
+        <a href="#!" class="brand-logo">{% block titulo %}{% endblock %}</a>
+        <ul class="right hide-on-med-and-down">
+         	<li></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+	{% block contenido %}{% endblock %}
+	<!-- Fin del menu principal -->
+	<script src="{% static 'js/jquery.min.js' %}"></script>
+	<script src="{% static 'js/jquery-ui.min.js' %}"></script>
+	<!--<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>-->
+	<script src="{% static 'js/materialize.min.js' %}"></script>
+	<script src="{% static 'js/jquery.maskedinput.min.js' type="text/javascript" %}"></script>
+	<script src="{% static 'js/main.js' %}"></script>
+	<script src="{% static 'js/jquery.maskMoney.js' %}"></script>
+	{% block otroscript %}{% endblock %}
+	<script>
+	$(document).ready(function(){
+			$('.dropdown-button').dropdown();
+			$(".button-collapse").sideNav();
+
+	});
+	{% block script %}{% endblock %}
+	</script>
+
+</body>
+</html>

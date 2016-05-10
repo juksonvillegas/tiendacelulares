@@ -1,0 +1,80 @@
+{% extends "base.html"%}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>{% block title%}Agregar Proveedores{%endblock%}</title>
+</head>
+<body>
+	{% block titulo1 %}Agregar Proveedores{% endblock %}
+	{% block titulo %}Agregar Proveedores{% endblock %}
+	{%block contenido%}
+	<div class="row">
+		<form action="" method="POST" id="cliente-form" class="col l8 m8 s12 offset-l2">
+			{% csrf_token %}
+			<div class="row">
+				<div class="input-field col s4 m4 offset-m4 l3 offset-l2">
+					<input  id="ruc" name="ruc"type="text" class="
+					validate left-align ">
+					<label for="ruc"> RUC</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12 m8 offset-m4 l8 offset-l2">
+					<input id="nombre" name="nombre"type="text" class="
+					validate left-align ">
+					<label for="nombre">Nombre completo</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12 m8 offset-m4 l8 offset-l2">
+					<input id="direccion" name="direccion"type="text" class="
+					validate left-align ">
+					<label for="direccion">Dirección</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s4 m4 offset-m4 l2 offset-l2">
+					<input  id="telefono" name="telefono"type="text" class="
+					validate left-align ">
+					<label for="dni">Teléfono</label>
+				</div>
+			</div>
+			<div class="row col l4 offset-l6 m4 offset-m8 s10 offset-s2">
+				<button class="btn teal darken-4 waves-effect waves-light right " type="submit" name="action">Guardar<i class="material-icons right">send</i></button>
+			</div>
+		</form>
+	</div>
+	{%endblock%}
+	{% block script%}
+		$(document).ready(function() {
+    		$('select').material_select();
+    		$('#ruc').mask("99999999999");
+    		$('#telefono').mask("999999999");
+		});
+		
+		$('#cliente-form').on('submit', function(event){
+   			event.preventDefault();
+    		console.log("form submitted!")  // sanity check
+    		agregar_cliente();
+		});
+		
+		function agregar_cliente(){
+			console.log('agregar proveedores funcionando');
+			$.ajax({
+				url : "agregar-ajax",
+				type : "POST",
+				data : { 'ruc' : $('#ruc').val(), 'nombre' : $('#nombre').val(), 'direccion' : $('#direccion').val(), 'telefono': $('#telefono').val()}, 
+				success: function(respuesta){
+					if(respuesta == 'Proveedor registrado correctamente.')
+					{
+						$('#cliente-form')[0].reset();
+						$('#dni').focus();
+					}
+					Materialize.toast(respuesta, 5000);
+				}
+			});
+		};
+	{% endblock %}
+</body>
+</html>

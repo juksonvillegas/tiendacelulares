@@ -1,0 +1,83 @@
+{% extends "base.html"%}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>{% block title%}Agregar precios de productos{%endblock%}</title>
+</head>
+<body>
+	{% block titulo1 %}Agregar precios de productos{% endblock %}
+	{% block titulo %}Agregar precios de productos{% endblock %}
+	{%block contenido%}
+	<div class="row">
+		<form action="" method="POST" id="precios-form" class="col l12 m12 s12 ">
+			{% csrf_token %}
+			<div class="row">
+				<div class="input-field col s10 m8 offset-m2 l2 offset-l2">
+					<input  id="cliente" name="cliente"type="text" class="
+					validate left-align ">
+					<label for="cliente"> Precio Cliente</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s10 m8 offset-m2 l2 offset-l2">
+					<input  id="punto" name="punto"type="text" class="
+					validate left-align ">
+					<label for="punto"> Precio punto de venta</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s10 m8 offset-m2 l8 offset-l2">
+					<input  id="descripcion" name="descripcion"type="text" class="
+					validate left-align ">
+					<label for="descripcion"> Descripción del precio</label>
+				</div>
+			</div>
+			<div class="row col l4 offset-l6 m8 offset-m2 s4 offset-s8">
+				<button class="btn teal darken-4 waves-effect waves-light right " type="submit" name="action">Guardar<i class="material-icons right">send</i></button>
+			</div>
+		</form>
+	</div>
+	{%endblock%}
+
+	{% block script%}
+
+		$(document).ready(function(){
+			$('#cliente,#punto').maskMoney({
+				prefix: 'S/. ',
+				allowZero: false,
+				allowNegative: false,
+				thousands: ' ',
+				decimal: '.',
+				precision: 2,
+				affixesStay : false,
+				symbolPosition : 'left'
+			});
+		});
+
+		$('#precios-form').on('submit', function(event){
+   			event.preventDefault();
+    		console.log("form submitted!")  // sanity check
+    		agregar_precio();
+		});
+
+		function agregar_precio(){
+			console.log('agregar precio funcionando');
+			$.ajax({
+				url : "agregar-ajax",
+				type : "POST",
+				data : { 'cliente' : $('#cliente').val(), 'punto' : $('#punto').val(), 'descripcion' : $('#descripcion').val() }, 
+				success: function(respuesta){
+					if(respuesta == 'Precio registrado correctamente.')
+					{
+						$('#precios-form')[0].reset();
+						$('#cliente').focus();
+					}
+					Materialize.toast(respuesta, 5000);
+				}
+			});
+		};
+
+	{% endblock %}
+</body>
+</html>

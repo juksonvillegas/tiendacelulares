@@ -1,0 +1,88 @@
+{% extends "base.html"%}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>{% block title%}Buscar Clientes{%endblock%}</title>
+</head>
+<body>
+	{% block titulo1 %}Buscar Clientes{% endblock %}
+	{% block titulo %}Buscar Clientes{% endblock %}
+	{%block contenido%}
+	{% csrf_token %}
+	<div class="row">
+		<nav>
+			<div class="nav-wrapper blue-grey">
+				<form>
+					<div class="input-field">
+						<input id="texto" type="search" required placeholder="Buscar">
+						<label for="texto"><i class="material-icons">search</i></label>
+						<i class="material-icons">close</i>
+					</div>
+				</form>
+			</div>
+		</nav>
+	</div>
+	<div id="tabla">
+	</div>
+	{%endblock%} 
+	{% block script%}
+		$(document).ready(function() {
+    		$('select').material_select();
+		});
+		$('select').change(aplimask);
+		function aplimask(){
+			document.getElementById("texto").focus();
+		}
+		$('#texto').keyup(function(){
+			var texto = $('#texto').val();
+			if(texto.length > 1){
+				$.ajax({
+					data: {'term':texto},
+					url: "/clientes/buscar-ajax",
+					type: "get",				
+					success: function(data){
+						var cabecera, footer;
+						var filas='';
+						cabecera = '<table class="responsive-table striped"><thead><tr><th data-field="dni">DNI</th><th data-field="nombre">Nombre</th><th data-field="nacimiento">Fecha nac.</th><th data-field="sexo">Sexo</th><th data-field="direccion">Dirección</th><th data-field="email">E-mail</th><th data-field="telefono">Teléfono</th><th data-field="mayorista">Mayorista</th></tr></thead><tbody>';
+						footer = '</tbody></table>';
+						for(var i = 0; i<data.length; i++){
+							if(data[i].sexo == true)
+							{
+								sexo='Masculino';
+							}
+							else
+							{
+								sexo='Femenino';
+							}
+							var nac = new Date(data[i].nacimiento);
+							var nacimiento = nac.getDate() + '/' + (nac.getMonth() + 1) + '/' + nac.getFullYear();
+							if(data[i].mayorista == true)
+							{
+								mayorista='Si';
+							}
+							else
+							{
+								mayorista = 'No';
+							}
+							filas+='<tr><td>'+data[i].dni + 
+							'</td><td>'+data[i].nombre + 
+							'</td><td>'+ nacimiento +
+							'</td><td>'+ sexo + 
+							'</td><td>'+data[i].direccion + 
+							'</td><td>'+data[i].email +  
+							'</td><td>'+data[i].telefono+
+							'</td><td>'+mayorista+
+							'</td><td>' + 
+							'<a href=/clientes/editar/' + data[i].id + '> <i class="material-icons">edit</i></a>' +
+							'</td><td>'+
+							'<a href=""> <i class="material-icons">remove_circle</i></a>'+'</td></tr>';
+						}
+						$('#tabla').html(cabecera+filas+footer);
+					}
+				});
+			}
+		});
+	{% endblock %}
+</body>
+</html>

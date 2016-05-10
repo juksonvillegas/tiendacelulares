@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	{% extends "base.html"%}
+	{% load static from staticfiles %}
+	<title>{% block title %}Buscar Preventas{% endblock %}</title>
+</head>
+<body>
+	{% block titulo1 %}Preventas{% endblock %}
+	{% block titulo %}Preventas{% endblock %}
+	{%block contenido%}
+	<div class="row">
+		<form action="" class="" method="POST" id="preventa-form">
+		{% csrf_token %}
+			<table class="responsive-table striped">
+				<thead>
+					<tr>
+						<th data-field="Fecha">Fecha</th>
+						<th data-field="Cliente">Cliente</th>
+						<th data-field="Categoria">Categoria</th>
+						<th data-field="Producto">Producto</th>
+						<th data-field="Cantidad">Cantidad</th>
+						<th data-field="Retorno">Retorno</th>
+						<th data-field="Venta">Venta</th>
+						<th data-field="Eliminar">Eliminar</th>
+					</tr>
+				</thead>
+				<tbody>
+					{%for preventa in preventas%}
+						<tr>
+							<td>{{preventa.fecha|date:"d/m/Y H:i"}}</td>
+							<td>{{preventa.cliente.nombre|title}}</td>
+							<td>{{preventa.producto.categoria.nombre}}</td>
+							<td>{{preventa.producto.nombre}}</td>
+							<td>{{preventa.cantidad}}</td>
+							<td><a href=""> <i class="material-icons">reply</i></a></td>
+							<td><a href="/preventas/editar/{{preventa.pk}}"> <i class="material-icons">monetization_on</i></a></td>
+							<td><a href=""> <i class="material-icons">remove_circle</i></a></td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</form>
+	</div>
+	{%endblock%}
+	{% block otroscript %}
+	{% endblock %}
+	{% block script %}
+		$('#preventa-form').on('submit', function(event){
+   			event.preventDefault();
+    		agregar_preventa();
+		});
+
+		function agregar_preventa(){
+			$.ajax({
+				url : "agregar-ajax",
+				type : "POST",
+				data : {'cliente':$('#idcliente').val(), 'producto':$('#idproducto').val(), 'cantidad':$('#cantidad').val()}, 
+				success: function(respuesta){
+					if(respuesta == 'Preventa registrada correctamente.')
+					{
+						$('#preventa-form')[0].reset();
+						$('#cliente').focus();
+					}
+					Materialize.toast(respuesta, 7000);
+				}
+			});
+		};	
+
+		$('#cliente').keyup(function() {
+			var $cliente = $('#cliente');
+  			$cliente.autocomplete({
+    			source: "/clientes/buscar-ajax2",
+    			minLength: 2,
+    			select: function (event, ui) {
+        			$("#idcliente").val(ui.item.id); 
+    			}
+  			});
+		});
+		$('#cliente').keyup(function() {
+			var $producto = $('#producto');
+  			$producto.autocomplete({
+    			source: "/productos/buscar-ajax2",
+    			minLength: 2,
+    			select: function (event, ui) {
+        			$("#idproducto").val(ui.item.id); 
+    			}
+  			});
+		});
+	{% endblock %}
+</body>
+</html>
