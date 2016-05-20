@@ -26,19 +26,21 @@ def agregarventas(request):
 		try:
 			campo = 'Debe ingresar cliente'
 			ccliente = int(request.POST.get('cliente'))
+			campo = 'Error en el tipo de documentacion de Venta'
 			ccdocumentado = bool(request.POST.get('documentado'))
 			cliente = Cliente.objects.get(id = ccliente)
-			venta = Venta(cliente = cliente)
+			venta = Venta(cliente = cliente, documentado = ccdocumentado)
 			lista = request.POST.getlist('lista[]')
-			consignacion.save()
+			#consignacion.save()
 			for li in lista:
 				l = li.split(",")
-				cn = int(consignacion.pk)
 				p = Producto.objects.get(id = int(l[0]))
-				c=int(l[1])
-				cd = Consignacion_detalle(consignacion=consignacion, producto=p, cantidad=c)
-				cd.save()
-			respuesta = "Consignacion registrada correctamente."
+				c = int(l[1])
+				precio = l[2]
+				pr = float(precio[4:])
+				cd = Venta_detalle(venta=venta, producto=p, cantidad=c, precio=pr)
+				#cd.save()
+			respuesta = "Venta registrada correctamente."
 		except ValueError as e:
 			#respuesta = "Error: "
 			#respuesta =respuesta + campo

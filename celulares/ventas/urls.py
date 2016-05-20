@@ -6,4 +6,5 @@ urlpatterns = [
 	url(r'^ventas/agregar$', agregarventa.as_view(), name="agregarventa"),
 	url(r'^consignaciones/buscar$', listarconsignaciones, name="listarconsignacion"),
 	url(r'^consignaciones/agregar-ajax$', agregarconsignaciones, name="agregarconsignaciones"),
+	url(r'^ventas/agregar-ajax$', agregarventas, name="agregarventas"),
 ]

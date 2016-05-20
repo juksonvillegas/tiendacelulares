@@ -11,7 +11,7 @@
 	{% block titulo %}Agregar Ventas{% endblock %}
 	{%block contenido%}
 	<div class="row">
-		<form action="" class="col l10 offset-l1" method="POST" id="preventa-form">
+		<form action="" class="col l10 offset-l1" method="POST" id="venta-form">
 			{% csrf_token %}
 			<div class="row col s12 m8 offset-m2 l12">
 				<div class="input-field col l8 m8 s8">
@@ -20,7 +20,7 @@
           			<label for="cliente">Selccionar cliente</label>
 				</div>
 				<div class="input-field col l4 m4 s4">
-					<input type="checkbox" class="filled-in" id="filled-in-box" 	 />
+					<input type="checkbox" class="filled-in" id="filled-in-box"/>
       				<label for="filled-in-box">Documentado</label>
 				</div>
 				<div class="row">
@@ -112,7 +112,7 @@
 			});
 		});
 
-		$('#preventa-form').on('submit', function(event){
+		$('#venta-form').on('submit', function(event){
    			event.preventDefault();
     		agregar_consignacion();
 		});
@@ -160,11 +160,12 @@
 			datos = new Array();
 			$('#items tr').each(function () {
 				var producto = $(this).find('td').eq(0).html();
- 				var cantidad= $(this).find('td').eq(2).html();
- 				if(typeof producto != 'undefined' && typeof cantidad != 'undefined')
+ 				var cantidad = $(this).find('td').eq(2).html();
+				var precio = $(this).find('td').eq(3).html();
+ 				if(typeof producto != 'undefined' && typeof cantidad != 'undefined' && typeof precio != 'undefined')
  				{
  					$(this).remove();
- 					dato = new Array(producto, cantidad);
+ 					dato = new Array(producto, cantidad, precio);
  					datos.push(dato);
 				}
 	 		});
@@ -172,11 +173,11 @@
  				$.ajax({
 					url : "agregar-ajax",
 					type : "POST",
-					data : {'cliente':$('#idcliente').val(), 'lista[]':datos},
+					data : {'cliente':$('#idcliente').val(), 'documentado':$('#filled-in-box').val() , 'lista[]':datos},
 					success: function(respuesta){
 						if(respuesta == 'Consignacion registrada correctamente.')
 						{
-							$('#preventa-form')[0].reset();
+							$('#venta-form')[0].reset();
 							$('#cliente').focus();
 						}
 						Materialize.toast(respuesta, 7000);

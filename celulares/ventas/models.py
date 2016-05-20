@@ -41,7 +41,7 @@ class Venta(models.Model):
 class Venta_detalle(models.Model):
 	venta = models.ForeignKey('ventas.Venta', on_delete = models.CASCADE)
 	producto = models.ForeignKey('productos.Producto', on_delete = models.CASCADE)
-	cantida = models.IntegerField(default=1)
+	cantidad = models.IntegerField(default=1)
 	precio = models.DecimalField(max_digits=5, decimal_places=2)
 
 	def __str__(self):
