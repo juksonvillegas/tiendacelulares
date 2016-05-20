@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 
-# Create your models here. 
+# Create your models here.
 class Consignacion(models.Model):
 	cliente = models.ForeignKey('clientes.Cliente', on_delete=models.CASCADE,)
 	fecha = models.DateTimeField(auto_now_add=True, blank = True)
@@ -38,7 +38,7 @@ class Venta(models.Model):
 	def __unicode__(self):
 		return str(self.fecha.strftime('%d-%m-%Y %H:%M'))
 
-class venta_detalle(models.Model):
+class Venta_detalle(models.Model):
 	venta = models.ForeignKey('ventas.Venta', on_delete = models.CASCADE)
 	producto = models.ForeignKey('productos.Producto', on_delete = models.CASCADE)
 	cantida = models.IntegerField(default=1)

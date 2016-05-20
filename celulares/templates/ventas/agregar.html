@@ -14,27 +14,31 @@
 		<form action="" class="col l10 offset-l1" method="POST" id="preventa-form">
 			{% csrf_token %}
 			<div class="row col s12 m8 offset-m2 l12">
-				<div class="input-field">
+				<div class="input-field col l8 m8 s8">
 					<i class="material-icons prefix">search</i>
 					<input id="cliente" type="text" class="validate">
-          			<label for="cliente">Selccionar cliente</label>	
+          			<label for="cliente">Selccionar cliente</label>
+				</div>
+				<div class="input-field col l4 m4 s4">
+					<input type="checkbox" class="filled-in" id="filled-in-box" 	 />
+      				<label for="filled-in-box">Documentado</label>
 				</div>
 				<div class="row">
 					<input type="hidden" id="idcliente" name="idcliente" value="">
 				</div>
 			</div>
-			<div class="row col s12 m6 offset-m2 l12">
-				<div class="input-field col l8 ">
+			<div class="row col s12 m8 offset-m2 l12">
+				<div class="input-field col l8 s12 m12 ">
 					<i class="material-icons prefix">search</i>
 					<input id="producto" type="text" class="validate">
-          			<label for="producto">Seleccionar producto</label>	
+          			<label for="producto">Seleccionar producto</label>
           			<input type="hidden" id="idproducto" name="idproducto" value="">
 				</div>
-        		<div class="input-field col s6 l2">
+        		<div class="input-field col s6 m6 l2">
          			 <input disabled value="0.00" id="punto" type="text" class="validate">
          			 <label for="punto">Punto Venta</label>
         		</div>
-        		<div class="input-field col s6 l2">
+        		<div class="input-field col s6 m6 l2">
          			 <input disabled value="0.00" id="pcliente" type="text" class="validate">
          			 <label for="cliente">Cliente</label>
         		</div>
@@ -117,8 +121,8 @@
 			if($('#idproducto').val() !='' && $('#cantidad').val() != ''){
 				$('#items tr:last').after('<tr><td>' + $('#idproducto').val()
 				 + '</td><td>' + $('#producto').val()
-				 + '</td><td>'+ $('#cantidad').val() 
-				 + '</td><td>'+ $('#precio').val() 
+				 + '</td><td>'+ $('#cantidad').val()
+				 + '</td><td>'+ $('#precio').val()
 				 + '</td><td> <a id="borrar" onClick="eliminar_item(); return false;" class="btn-floating red"><i class="material-icons medium">delete</i></a></td></tr>');
 				$('#producto').val("");
 				$('#idproducto').val("");
@@ -137,7 +141,7 @@
 		};
 
 		function mostrarprecio(){
-			var id = $('#idproducto').val();	
+			var id = $('#idproducto').val();
 			if(id != '')
 			{
 				$.ajax({
@@ -168,7 +172,7 @@
  				$.ajax({
 					url : "agregar-ajax",
 					type : "POST",
-					data : {'cliente':$('#idcliente').val(), 'lista[]':datos}, 
+					data : {'cliente':$('#idcliente').val(), 'lista[]':datos},
 					success: function(respuesta){
 						if(respuesta == 'Consignacion registrada correctamente.')
 						{
@@ -182,8 +186,8 @@
  			else{
  				Materialize.toast('Debe ingresar un cliente y los productos', 7000);
  			}
-			
-		};	
+
+		};
 
 		$('#cliente').keyup(function() {
 			$('#idcliente').val("");
@@ -192,7 +196,7 @@
     			source: "/clientes/buscar-ajax2",
     			minLength: 2,
     			select: function (event, ui) {
-        			$("#idcliente").val(ui.item.id); 
+        			$("#idcliente").val(ui.item.id);
     			}
   			});
 		});
@@ -203,7 +207,7 @@
     			source: "/productos/buscar-ajax2",
     			minLength: 2,
     			select: function (event, ui) {
-        			$("#idproducto").val(ui.item.id); 
+        			$("#idproducto").val(ui.item.id);
         			mostrarprecio();
     			}
   			});
