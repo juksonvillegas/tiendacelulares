@@ -14,6 +14,23 @@ class listarproveedores(TemplateView):
 	template_name = 'proveedores/buscar.html'
 
 @login_required(login_url='/')
+def buscarproveedor2(request):
+	if request.is_ajax():
+		texto = request.GET['term']
+		print(texto)
+		if texto is not None:
+			proveedores = Proveedor.objects.filter(Q(nombre__contains = texto))[:10]
+			results = []
+			for proveedor in proveedores:
+				proveedor_json = {}
+				proveedor_json['id'] = proveedor.id
+				proveedor_json['label'] = proveedor.nombre
+				proveedor_json['value'] = proveedor.nombre
+				results.append(proveedor_json)
+			data = json.dumps(results)
+			return HttpResponse(data, content_type="application/json")
+
+@login_required(login_url='/')
 def buscarproveedor(request):
 	if request.is_ajax():
 		texto = request.GET['texto']
@@ -40,7 +57,7 @@ def agregarproveedores(request):
 			telefono = request.POST.get('telefono')
 			if ruc != '' and nombre != '' and direccion != '' and telefono != '':
 				proveedor = Proveedor()
-				proveedor.ruc = ruc 
+				proveedor.ruc = ruc
 				proveedor.nombre = nombre
 				proveedor.direccion = direccion
 				proveedor.telefono = telefono
@@ -51,15 +68,11 @@ def agregarproveedores(request):
 				respuesta = respuesta + campo
 		except ValueError:
 			respuesta = "Error: "
-			respuesta =respuesta + campo  
+			respuesta =respuesta + campo
 		except Exception as ex:
 			respuesta = str(ex.message)
 		finally:
 			return HttpResponse(
-				json.dumps(respuesta), 
+				json.dumps(respuesta),
 				content_type="application/json"
 			)
-
-
-
-

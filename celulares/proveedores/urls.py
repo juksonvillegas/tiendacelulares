@@ -20,5 +20,6 @@ urlpatterns = [
 	url(r'^proveedores/buscar$', listarproveedores.as_view(), name="listarproveedores"),
 	url(r'^proveedores/agregar$', agregarproveedor.as_view(), name="agregarproveedores"),
 	url(r'^proveedores/buscar-ajax$', buscarproveedor, name="buscarproveedores"),
+    url(r'^proveedores/buscar-ajax2$', buscarproveedor2, name="buscarproveedores2"),
     url(r'^proveedores/agregar-ajax$', agregarproveedores, name="agregarproveedor"),
 ]

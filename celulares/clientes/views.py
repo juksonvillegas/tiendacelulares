@@ -10,7 +10,7 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 import json
-from datetime import datetime 
+from datetime import datetime
 import time
 
 
@@ -20,7 +20,7 @@ class home(TemplateView):
 @login_required(login_url='/')
 def listarclientes(request):
 	clients = Cliente.objects.all()
-	user = request.user 
+	user = request.user
 	return render_to_response('clientes/buscar.html', {'clients': clients}, context_instance=RequestContext(request))
 
 @login_required(login_url='/')
@@ -40,12 +40,29 @@ def buscarcliente(request):
 			#return HttpResponse(data, content_type='application/json')
 
 @login_required(login_url='/')
-def buscarcliente2(request): 
+def buscarcliente2(request):
 	if request.is_ajax():
 		texto = request.GET['term']
 		print(texto)
 		if texto is not None:
 			clientes = Cliente.objects.filter(Q(nombre__contains = texto), mayorista = True)[:10]
+			results = []
+			for cliente in clientes:
+				cliente_json = {}
+				cliente_json['id'] = cliente.id
+				cliente_json['label'] = cliente.nombre
+				cliente_json['value'] = cliente.nombre
+				results.append(cliente_json)
+			data = json.dumps(results)
+			return HttpResponse(data, content_type="application/json")
+
+@login_required(login_url='/')
+def buscarcliente3(request):
+	if request.is_ajax():
+		texto = request.GET['term']
+		print(texto)
+		if texto is not None:
+			clientes = Cliente.objects.filter(Q(nombre__contains = texto))[:10]
 			results = []
 			for cliente in clientes:
 				cliente_json = {}
@@ -107,7 +124,7 @@ def agregarclientes(request):
 			print(type(ex).__name__)
 		finally:
 			return HttpResponse(
-				json.dumps(respuesta), 
+				json.dumps(respuesta),
 				content_type="application/json"
 			)
 
@@ -115,7 +132,3 @@ def agregarclientes(request):
 def editarcliente(request, client):
 	cliente = Cliente.objects.get(id = client)
 	return render_to_response('clientes/editar.html', {'cliente': cliente}, context_instance=RequestContext(request))
-
-
-
-

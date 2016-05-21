@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^', include('proveedores.urls', namespace = 'proveedores')),
     url(r'^', include('productos.urls', namespace = 'productos')),
     url(r'^', include('ventas.urls', namespace = 'ventas')),
+    url(r'^', include('compras.urls', namespace = 'ventas')),
     #url(r'^', include('apps.usuarios.urls', namespace = 'usuarios')),
     #url(r'^', include('apps.notas.urls', namespace = 'notas')),
     #url(r'^login/$', 'apps.usuarios.views.login'),

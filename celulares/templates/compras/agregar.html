@@ -7,8 +7,8 @@
 	<title>{% block title %}Agregar Ventas{% endblock %}</title>
 </head>
 <body>
-	{% block titulo1 %}Agregar Ventas{% endblock %}
-	{% block titulo %}Agregar Ventas{% endblock %}
+	{% block titulo1 %}Agregar Compras{% endblock %}
+	{% block titulo %}Agregar Compras{% endblock %}
 	{%block contenido%}
 	<div class="row">
 		<form action="" class="col l10 offset-l1" method="POST" id="venta-form">
@@ -194,14 +194,14 @@
 			$('#idcliente').val("");
 			var $cliente = $('#cliente');
   			$cliente.autocomplete({
-    			source: "/clientes/buscar-ajax3",
+    			source: "/proveedores/buscar-ajax2",
     			minLength: 2,
     			select: function (event, ui) {
         			$("#idcliente").val(ui.item.id);
     			}
   			});
 		});
-
+    
 		$('#producto').keyup(function() {
 			var $producto = $('#producto');
   			$producto.autocomplete({
@@ -212,9 +212,7 @@
         			mostrarprecio();
     			}
   			});
-
 		});
-
 	{% endblock %}
 </body>
 </html>
