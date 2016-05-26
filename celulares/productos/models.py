@@ -39,8 +39,8 @@ class Producto(models.Model):
 class Almacen(models.Model):
 	producto = models.ForeignKey('Producto', on_delete=models.CASCADE,)
 	stock = models.IntegerField()
-	#Falta agregar el campo para las compras
-	barras = models.IntegerField()
+	compra = models.ForeignKey('compras.Compra', on_delete=models.CASCADE,)
+	estado = models.BooleanField(default = True)
 
 	def __str__(self):
 		return self.producto

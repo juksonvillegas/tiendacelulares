@@ -36,8 +36,6 @@ def buscarcliente(request):
 				lista.append({'id':c.id, 'dni':c.dni, 'nombre':c.nombre, 'nacimiento':str(c.nacimiento), 'sexo':c.sexo, 'direccion':c.direccion, 'email':c.email, 'telefono':c.telefono, 'mayorista':c.mayorista})
 			data = json.dumps(lista)
 			return HttpResponse(data, content_type='application/json')
-			#data = serializers.serialize('json', clients, fields = {'dni', 'nombre', 'nacimiento', 'sexo', 'direccion', 'email', 'telefono', 'mayorista'})
-			#return HttpResponse(data, content_type='application/json')
 
 @login_required(login_url='/')
 def buscarcliente2(request):

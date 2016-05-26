@@ -118,7 +118,7 @@
 		});
 
 		function agregar_item(){
-			if($('#idproducto').val() !='' && $('#cantidad').val() != ''){
+			if($('#idproducto').val() !='' && $('#cantidad').val() != '' && $('#precio').val() != 'S/. 0.00'){
 				$('#items tr:last').after('<tr><td>' + $('#idproducto').val()
 				 + '</td><td>' + $('#producto').val()
 				 + '</td><td>'+ $('#cantidad').val()
@@ -132,7 +132,7 @@
 			}
 			else
 			{
-				Materialize.toast('Debe ingresar un producto y una cantidad!', 7000);
+				Materialize.toast('Debe ingresar un producto, cantidad y precio', 7000);
 			}
 		};
 
@@ -187,7 +187,6 @@
  			else{
  				Materialize.toast('Debe ingresar un cliente y los productos', 7000);
  			}
-
 		};
 
 		$('#cliente').keyup(function() {

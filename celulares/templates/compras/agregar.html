@@ -17,7 +17,7 @@
 				<div class="input-field col l8 m8 s8">
 					<i class="material-icons prefix">search</i>
 					<input id="cliente" type="text" class="validate">
-          			<label for="cliente">Selccionar cliente</label>
+          			<label for="cliente">Selccionar Proveedor</label>
 				</div>
 				<div class="input-field col l4 m4 s4">
 					<input type="checkbox" class="filled-in" id="filled-in-box"/>
@@ -56,7 +56,7 @@
 					<i class="material-icons prefix">attach_money</i>
 					<input  id="precio" name="precio" type="text" min="1" max="99" class="
 					validate left-align">
-					<label for="cantidad">Precio</label>
+					<label for="precio">Precio</label>
 				</div>
 			</div>
 			<div class="col l1">
@@ -118,7 +118,7 @@
 		});
 
 		function agregar_item(){
-			if($('#idproducto').val() !='' && $('#cantidad').val() != ''){
+			if($('#idproducto').val() !='' && $('#cantidad').val() != '' && $('#precio').val()!='S/. 0.00'){
 				$('#items tr:last').after('<tr><td>' + $('#idproducto').val()
 				 + '</td><td>' + $('#producto').val()
 				 + '</td><td>'+ $('#cantidad').val()
@@ -132,7 +132,7 @@
 			}
 			else
 			{
-				Materialize.toast('Debe ingresar un producto y una cantidad!', 7000);
+				Materialize.toast('Debe ingresar un producto, cantidad y precio', 7000);
 			}
 		};
 
@@ -201,7 +201,7 @@
     			}
   			});
 		});
-    
+
 		$('#producto').keyup(function() {
 			var $producto = $('#producto');
   			$producto.autocomplete({

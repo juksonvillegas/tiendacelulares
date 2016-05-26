@@ -42,8 +42,6 @@ def agregarventas(request):
 				#cd.save()
 			respuesta = "Venta registrada correctamente."
 		except ValueError as e:
-			#respuesta = "Error: "
-			#respuesta =respuesta + campo
 			respuesta = str(e.message)
 		except Exception as ex:
 			respuesta = str(ex.message)
@@ -72,8 +70,6 @@ def agregarconsignaciones(request):
 				cd.save()
 			respuesta = "Consignacion registrada correctamente."
 		except ValueError as e:
-			#respuesta = "Error: "
-			#respuesta =respuesta + campo
 			respuesta = str(e.message)
 		except Exception as ex:
 			respuesta = str(ex.message)

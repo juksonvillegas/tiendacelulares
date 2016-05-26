@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'productos',
     'clientes',
     'ventas',
+    'compras',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -139,8 +140,3 @@ LOGIN_REDIRECT_URL='/consignaciones/buscar'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [ ruta_templates.child('static')
 ]
-
-
-
-
-

@@ -17,7 +17,6 @@ class listarproveedores(TemplateView):
 def buscarproveedor2(request):
 	if request.is_ajax():
 		texto = request.GET['term']
-		print(texto)
 		if texto is not None:
 			proveedores = Proveedor.objects.filter(Q(nombre__contains = texto))[:10]
 			results = []
@@ -35,7 +34,10 @@ def buscarproveedor(request):
 	if request.is_ajax():
 		texto = request.GET['texto']
 		if texto is not None:
-			proveedores = Proveedor.objects.filter(nombre__contains = texto)
+			if texto == 'listar':
+				proveedores = Proveedor.objects.all().order_by('nombre')
+			else:
+				proveedores = Proveedor.objects.filter(nombre__contains = texto)
 			data = serializers.serialize('json', proveedores, fields = {'ruc', 'nombre', 'direccion', 'telefono'})
 			return HttpResponse(data, content_type='application/json')
 
