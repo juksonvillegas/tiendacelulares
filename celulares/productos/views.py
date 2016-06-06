@@ -14,23 +14,23 @@ from django.core import serializers
 # Create your views here.
 @method_decorator(login_required, name='dispatch')
 class agregarcategoria(TemplateView):
-	template_name = 'productos/categoria_agregar.html' 
+	template_name = 'productos/categoria_agregar.html'
 
 @method_decorator(login_required, name='dispatch')
 class buscarcategoria(TemplateView):
-	template_name = 'productos/categoria_buscar.html' 
+	template_name = 'productos/categoria_buscar.html'
 
 @method_decorator(login_required, name='dispatch')
 class precios(TemplateView):
-	template_name = 'productos/precio_agregar.html' 
+	template_name = 'productos/precio_agregar.html'
 
 @method_decorator(login_required, name='dispatch')
 class buscarprecio(TemplateView):
-	template_name = 'productos/precio_buscar.html' 
+	template_name = 'productos/precio_buscar.html'
 
 @method_decorator(login_required, name='dispatch')
 class buscarproducto(TemplateView):
-	template_name = 'productos/buscar.html' 
+	template_name = 'productos/buscar.html'
 
 @login_required(login_url='/')
 def buscarcategorias(request):
@@ -72,8 +72,6 @@ def buscarprecios2(request):
 			data = json.dumps(results)
 			return HttpResponse(data, content_type='application/json')
 
-
-
 @login_required(login_url='/')
 def buscarproductos(request):
 	if request.is_ajax():
@@ -114,7 +112,7 @@ def agregarcategorias(request):
 			respuesta = str(ex.message)
 		finally:
 			return HttpResponse(
-				json.dumps(respuesta), 
+				json.dumps(respuesta),
 				content_type="application/json"
 			)
 
@@ -160,9 +158,9 @@ def agregarproductos(request):
 			respuesta = str(ex.message)
 		finally:
 			return HttpResponse(
-				json.dumps(respuesta), 
+				json.dumps(respuesta),
 				content_type="application/json"
-			) 
+			)
 
 @login_required(login_url='/')
 def agregarprecios(request):
@@ -187,6 +185,33 @@ def agregarprecios(request):
 			respuesta = str(ex.message)
 		finally:
 			return HttpResponse(
-				json.dumps(respuesta), 
+				json.dumps(respuesta),
+				content_type="application/json"
+			)
+
+@login_required(login_url='/')
+def agregaralmacen(request):
+	if request.method == 'POST':
+		try:
+			campo = 'Debe agregar producto'
+			pproducto = int(request.POST.get('producto'))
+			campo = 'Debe ingresar una cantidad'
+			punto = int(request.POST.get('stock'))
+			campo = 'Debe ingresar la descripcion del precio'
+			descripcion = request.POST.get('descripcion')
+			precio = Precio()
+			precio.cliente = cliente
+			precio.punto = punto
+			precio.descripcion = descripcion
+			precio.save()
+			respuesta = "Precio registrado correctamente."
+		except ValueError:
+			respuesta = "Error: "
+			respuesta =respuesta + campo
+		except Exception as ex:
+			respuesta = str(ex.message)
+		finally:
+			return HttpResponse(
+				json.dumps(respuesta),
 				content_type="application/json"
 			)

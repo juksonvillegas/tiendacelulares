@@ -19,5 +19,6 @@ from .views import *
 
 urlpatterns = [
     url(r'^compras/agregar$', agregarcompra.as_view(), name="compras"),
-	#url(r'^categorias/agregar-ajax$', agregarcategorias, name="agregar-categorias"),
+    url(r'^compras/agregar-ajax$', agregarcompras, name="agregarcompras"),
+    url(r'^compras/buscar$', listarcompras, name="listarcompras"),
 ]

@@ -17,7 +17,7 @@
 				<div class="input-field">
 					<i class="material-icons prefix">search</i>
 					<input id="cliente" type="text" class="validate">
-          			<label for="cliente">Selccionar cliente</label>	
+          			<label for="cliente">Selccionar cliente</label>
 				</div>
 				<div class="row">
 					<input type="hidden" id="idcliente" name="idcliente" value="">
@@ -27,7 +27,7 @@
 				<div class="input-field">
 					<i class="material-icons prefix">search</i>
 					<input id="producto" type="text" class="validate">
-          			<label for="producto">Seleccionar producto</label>	
+          			<label for="producto">Seleccionar producto</label>
 				</div>
 				<div class="row">
 					<input type="hidden" id="idproducto" name="idproducto" value="">
@@ -64,7 +64,7 @@
 				<div class="input-field">
 					<i class="material-icons prefix">note</i>
 					<input id="nota" type="text" class="validate">
-          			<label for="nota">Nota</label>	
+          			<label for="nota">Nota</label>
 				</div>
 			</div>
 			<div class="row col l4 offset-l8 m4 offset-m6 s10 offset-s2">
@@ -96,8 +96,8 @@
 		function agregar_item(){
 			if($('#idproducto').val() !='' && $('#cantidad').val() != ''){
 				$('#items tr:last').after('<tr><td>' + $('#idproducto').val()
-				 + '</td><td>' + $('#producto').val() 
-				 + '</td><td>'+ $('#cantidad').val() 
+				 + '</td><td>' + $('#producto').val()
+				 + '</td><td>'+ $('#cantidad').val()
 				 + '</td><td> <a id="borrar" onClick="eliminar_item(); return false;" class="btn-floating red"><i class="material-icons medium">delete</i></a></td></tr>');
 				$('#producto').val("");
 				$('#idproducto').val("");
@@ -130,7 +130,7 @@
  				$.ajax({
 					url : "agregar-ajax",
 					type : "POST",
-					data : {'cliente':$('#idcliente').val(), 'lista[]':datos}, 
+					data : {'cliente':$('#idcliente').val(), 'lista[]':datos, 'nota':$('#nota').val()}, 
 					success: function(respuesta){
 						if(respuesta == 'Consignacion registrada correctamente.')
 						{
@@ -145,8 +145,8 @@
  			else{
  				Materialize.toast('Debe ingresar un cliente y los productos', 7000);
  			}
-			
-		};	
+
+		};
 
 		$('#cliente').keyup(function() {
 			$('#idcliente').val("");
@@ -155,7 +155,7 @@
     			source: "/clientes/buscar-ajax2",
     			minLength: 2,
     			select: function (event, ui) {
-        			$("#idcliente").val(ui.item.id); 
+        			$("#idcliente").val(ui.item.id);
     			}
   			});
 		});
@@ -165,7 +165,7 @@
     			source: "/productos/buscar-ajax2",
     			minLength: 2,
     			select: function (event, ui) {
-        			$("#idproducto").val(ui.item.id); 
+        			$("#idproducto").val(ui.item.id);
     			}
   			});
 		});

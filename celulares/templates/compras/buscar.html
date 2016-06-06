@@ -4,19 +4,19 @@
 	<meta charset="UTF-8">
 	{% extends "base.html"%}
 	{% load static from staticfiles %}
-	<title>{% block title %}Listar Consignaciones{% endblock %}</title>
+	<title>{% block title %}Listar Compras{% endblock %}</title>
 </head>
 <body>
-	{% block titulo1 %}Consignaciones{% endblock %}
-	{% block titulo %}Consignaciones{% endblock %}
+	{% block titulo1 %}Compras{% endblock %}
+	{% block titulo %}Compras{% endblock %}
 	{%block contenido%}
 		<div class="row">
 			<ul class="collapsible popout" data-collapsible="accordion">
-			{%for c in consigs%}
+			{%for c in compras%}
     			<li>
       				<div class="collapsible-header">
       					<i class="material-icons white-text">label</i>
-						{{c.cliente|title}}
+						{{c.proveedor.nombre|title}}
 						<spam class="right" >{{c.fecha|date:"d/m/Y P"}}</spam>
       				</div>
       				<div class="collapsible-body blue-grey lighten-4">
@@ -26,27 +26,22 @@
 								<th data-field="categoria">Categoria</th>
 								<th data-field="producto">Producto</th>
 								<th data-field="cantidad">Cantidad</th>
+                <th data-field="Costo">Costo</th>
 							</thead>
 							<tbody>
 							{%for d in detalle%}
-								{%if c.id == d.consignacion.id %}
+								{%if c.id == d.compra.id %}
 									<tr>
 										<td>{{d.producto.categoria.nombre}}</td>
 										<td>{{d.producto.nombre}}</td>
 										<td>{{d.cantidad}}</td>
+                    <td>{{d.costo}}</td>
 									</tr>
 								{% endif %}
 							{% endfor %}
 							</tbody>
 						</table>
-						<div class="row">
-							<div class="card-panel  yellow accent-1 black-text">
-								Nota: {{c.nota|default_if_none:"Ninguna nota"}}
-							</div>
-
-						</div>
 						<div class="row white center blue-grey lighten-4">
-							<a href="/consignaciones/retornar/{{c.id}} " class="btn-floating btn-large waves-effect waves-light green"><i class="material-icons">reply</i></a>
 							<a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">delete_forever</i></a>
 						</div>
 					</div>

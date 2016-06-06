@@ -15,7 +15,7 @@ def login(request):
         # Clave correcta, y el usuario está marcado "activo"
         auth.login(request, user)
         # Redirigir a una página de éxito.
-        return HttpResponseRedirect('/preventas/buscar')
+        return HttpResponseRedirect('/consignaciones/buscar')
     else:
         # Mostrar una página de error
         print('desconocido')

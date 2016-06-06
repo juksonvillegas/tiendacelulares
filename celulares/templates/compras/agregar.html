@@ -4,27 +4,27 @@
 	<meta charset="UTF-8">
 	{% extends "base.html"%}
 	{% load static from staticfiles %}
-	<title>{% block title %}Agregar Ventas{% endblock %}</title>
+	<title>{% block title %}Agregar Compras{% endblock %}</title>
 </head>
 <body>
 	{% block titulo1 %}Agregar Compras{% endblock %}
 	{% block titulo %}Agregar Compras{% endblock %}
 	{%block contenido%}
 	<div class="row">
-		<form action="" class="col l10 offset-l1" method="POST" id="venta-form">
+		<form action="" class="col l10 offset-l1" method="POST" id="compra-form">
 			{% csrf_token %}
 			<div class="row col s12 m8 offset-m2 l12">
 				<div class="input-field col l8 m8 s8">
 					<i class="material-icons prefix">search</i>
-					<input id="cliente" type="text" class="validate">
-          			<label for="cliente">Selccionar Proveedor</label>
+					<input id="proveedor" type="text" class="validate">
+          			<label for="proveedor">Seleccionar Proveedor</label>
 				</div>
 				<div class="input-field col l4 m4 s4">
 					<input type="checkbox" class="filled-in" id="filled-in-box"/>
       				<label for="filled-in-box">Documentado</label>
 				</div>
 				<div class="row">
-					<input type="hidden" id="idcliente" name="idcliente" value="">
+					<input type="hidden" id="idproveedor" name="idproveedor" value="">
 				</div>
 			</div>
 			<div class="row col s12 m8 offset-m2 l12">
@@ -54,9 +54,9 @@
 			<div class="row col s4 m4 offset-m2 l3">
 				<div class="input-field ">
 					<i class="material-icons prefix">attach_money</i>
-					<input  id="precio" name="precio" type="text" min="1" max="99" class="
+					<input  id="costo" name="costo" type="text" min="1" max="99" class="
 					validate left-align">
-					<label for="precio">Precio</label>
+					<label for="costo">Costo</label>
 				</div>
 			</div>
 			<div class="col l1">
@@ -69,7 +69,7 @@
 						<th data-field="ID">ID</th>
 						<th data-field="Producto">Producto</th>
 						<th data-field="Cantidad">Cantidad</th>
-						<th data-field="Cantidad">Precio</th>
+						<th data-field="Cantidad">Costo</th>
 						<th data-field="eliminar">Eliminar</th>
 					</tr>
 				</thead>
@@ -89,10 +89,10 @@
 	{% endblock %}
 	{% block script %}
 		$(document).ready(function(e){
-			$('#cliente').focus();
+			$('#proveedor').focus();
 		});
 
-		$('#precio').keypress(function(e){
+		$('#costo').keypress(function(e){
 			if (e.which == 43){
 				agregar_item();
 				e.preventDefault();
@@ -100,7 +100,7 @@
 		});
 
 		$(document).ready(function(){
-			$('#precio').maskMoney({
+			$('#costo').maskMoney({
 				prefix: 'S/. ',
 				allowZero: false,
 				allowNegative: false,
@@ -112,27 +112,27 @@
 			});
 		});
 
-		$('#venta-form').on('submit', function(event){
+		$('#compra-form').on('submit', function(event){
    			event.preventDefault();
-    		agregar_consignacion();
+    		agregar();
 		});
 
 		function agregar_item(){
-			if($('#idproducto').val() !='' && $('#cantidad').val() != '' && $('#precio').val()!='S/. 0.00'){
+			if($('#idproducto').val() !='' && $('#cantidad').val() != '' && $('#costo').val()!='S/. 0.00'){
 				$('#items tr:last').after('<tr><td>' + $('#idproducto').val()
 				 + '</td><td>' + $('#producto').val()
 				 + '</td><td>'+ $('#cantidad').val()
-				 + '</td><td>'+ $('#precio').val()
+				 + '</td><td>'+ $('#costo').val()
 				 + '</td><td> <a id="borrar" onClick="eliminar_item(); return false;" class="btn-floating red"><i class="material-icons medium">delete</i></a></td></tr>');
 				$('#producto').val("");
 				$('#idproducto').val("");
 				$('#cantidad').val("");
-				$('#precio').val("");
+				$('#costo').val("");
 				$('#producto').focus();
 			}
 			else
 			{
-				Materialize.toast('Debe ingresar un producto, cantidad y precio', 7000);
+				Materialize.toast('Debe ingresar un producto, cantidad y costo', 7000);
 			}
 		};
 
@@ -156,48 +156,48 @@
 			}
 		};
 
-		function agregar_consignacion(){
+		function agregar(){
 			datos = new Array();
 			$('#items tr').each(function () {
 				var producto = $(this).find('td').eq(0).html();
  				var cantidad = $(this).find('td').eq(2).html();
-				var precio = $(this).find('td').eq(3).html();
- 				if(typeof producto != 'undefined' && typeof cantidad != 'undefined' && typeof precio != 'undefined')
+				var costo = $(this).find('td').eq(3).html();
+ 				if(typeof producto != 'undefined' && typeof cantidad != 'undefined' && typeof costo != 'undefined')
  				{
  					$(this).remove();
- 					dato = new Array(producto, cantidad, precio);
+ 					dato = new Array(producto, cantidad, costo);
  					datos.push(dato);
 				}
 	 		});
-			if($('#idcliente').val()!='' && !(jQuery.isEmptyObject(datos))){
+			if($('#idproveedor').val()!='' && !(jQuery.isEmptyObject(datos))){
  				$.ajax({
 					url : "agregar-ajax",
 					type : "POST",
-					data : {'cliente':$('#idcliente').val(), 'documentado':$('#filled-in-box').val() , 'lista[]':datos},
+					data : {'proveedor':$('#idproveedor').val(), 'documentado':$('#filled-in-box').is(':checked') , 'lista[]':datos},
 					success: function(respuesta){
-						if(respuesta == 'Consignacion registrada correctamente.')
+						if(respuesta == 'Compra registrada correctamente.')
 						{
-							$('#venta-form')[0].reset();
-							$('#cliente').focus();
+							$('#compra-form')[0].reset();
+							$('#proveedor').focus();
 						}
 						Materialize.toast(respuesta, 7000);
 					}
 				});
  			}
  			else{
- 				Materialize.toast('Debe ingresar un cliente y los productos', 7000);
+ 				Materialize.toast('Debe ingresar un proveedor y los productos', 7000);
  			}
 
 		};
 
-		$('#cliente').keyup(function() {
-			$('#idcliente').val("");
-			var $cliente = $('#cliente');
-  			$cliente.autocomplete({
+		$('#proveedor').keyup(function() {
+			$('#idproveedor').val("");
+			var $proveedor = $('#proveedor');
+  			$proveedor.autocomplete({
     			source: "/proveedores/buscar-ajax2",
     			minLength: 2,
     			select: function (event, ui) {
-        			$("#idcliente").val(ui.item.id);
+        			$("#idproveedor").val(ui.item.id);
     			}
   			});
 		});

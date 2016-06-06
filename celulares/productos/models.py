@@ -43,7 +43,7 @@ class Almacen(models.Model):
 	estado = models.BooleanField(default = True)
 
 	def __str__(self):
-		return self.producto
+		return self.producto.nombre
 
 	def __unicode__(self):
-		return self.producto
+		return self.producto.nombre

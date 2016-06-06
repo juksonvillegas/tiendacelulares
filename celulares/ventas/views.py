@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -16,7 +17,7 @@ from productos.models import Producto
 class agregarconsignacion(TemplateView):
 	template_name= 'ventas/consignacion/agregar.html'
 
-method_decorator(login_required,name='dispatch')
+@method_decorator(login_required,name='dispatch')
 class agregarventa(TemplateView):
 	template_name= 'ventas/agregar.html'
 
@@ -58,7 +59,8 @@ def agregarconsignaciones(request):
 			campo = 'Debe ingresar cliente'
 			ccliente = int(request.POST.get('cliente'))
 			cliente = Cliente.objects.get(id = ccliente)
-			consignacion = Consignacion(cliente = cliente)
+			nota = str(request.POST.get('nota'))
+			consignacion = Consignacion(cliente = cliente, nota= nota)
 			lista = request.POST.getlist('lista[]')
 			consignacion.save()
 			for li in lista:
@@ -83,5 +85,11 @@ def agregarconsignaciones(request):
 def listarconsignaciones(request):
 	consig = Consignacion.objects.filter(estado = True).order_by('-fecha')
 	detalle = Consignacion_detalle.objects.all()
-	user = request.user
 	return render_to_response('ventas/consignacion/buscar.html', {'consigs': consig, 'detalle':detalle}, context_instance=RequestContext(request))
+
+@login_required(login_url='/')
+def retornarconsignaciones(request, term):
+	consig = Consignacion.objects.get(id = term)
+	consig.estado = False
+	consig.save()
+	return redirect('/consignaciones/buscar')

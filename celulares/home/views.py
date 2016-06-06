@@ -14,7 +14,7 @@ def login(request):
 		print(request.user.is_authenticated())
 		return render_to_response('login.html')
 	else:
-		return render_to_response('/preventas/buscar')
+		return render_to_response('/consignaciones/buscar')
 
 class preventa(TemplateView):
 	template_name = 'preventa/preventa.html'
