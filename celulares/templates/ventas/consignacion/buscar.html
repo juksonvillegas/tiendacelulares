@@ -46,13 +46,33 @@
 
 						</div>
 						<div class="row white center blue-grey lighten-4">
-							<a href="/consignaciones/retornar/{{c.id}} " class="btn-floating btn-large waves-effect waves-light green"><i class="material-icons">reply</i></a>
-							<a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">delete_forever</i></a>
+							<a href="/consignaciones/retornar/{{c.id}} " class="btn-floating btn-large waves-effect waves-light green" onclick="showModal(this,'retornar'); return false;" ><i class="material-icons">reply</i></a>
+							<a href="/consignaciones/eliminar/{{c.id}}" class="btn-floating btn-large waves-effect waves-light red" onclick="showModal(this,'eliminar'); return false;"><i class="material-icons">delete_forever</i></a>
 						</div>
 					</div>
     			</li>
 		{% endfor %}
 		</ul>
+		</div>
+		<div id="retornar" class="modal">
+			<div class="modal-content">
+				<h4>Retorno de productos</h4>
+				<p>Verificar cantidad e igualdad de productos entregados.</p>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="waves-effect waves-green btn-flat" id="retornar_yes">Retornar</a>
+				<a href="#" class="waves-effect waves-red btn-flat" onclick="$('#retornar').closeModal(); return false;" >Cancelar</a>
+			</div>
+		</div>
+		<div id="eliminar" class="modal">
+			<div class="modal-content">
+				<h4>Eliminar consignacion</h4>
+				<p>Verificar cantidad e igualdad de productos entregados.</p>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="waves-effect waves-green btn-flat" id="eliminar_yes">Eliminar</a>
+				<a href="#" class="waves-effect waves-red btn-flat" onclick="$('#eliminar').closeModal(); return false;" >Cancelar</a>
+			</div>
 		</div>
 	{% endblock %}
 	{% block script %}
@@ -60,6 +80,10 @@
     		$('.collapsible').collapsible({
       		accordion : false});
   		});
+			function showModal(but, modal){
+	    	$('#' + modal).openModal();
+	      $('#' + modal + '_yes').click(function(){ $('#' + modal).closeModal(); document.location = but.href; });
+	    }
 	{% endblock %}
 </body>
 </html>

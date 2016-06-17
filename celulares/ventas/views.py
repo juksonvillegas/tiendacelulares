@@ -93,3 +93,8 @@ def retornarconsignaciones(request, term):
 	consig.estado = False
 	consig.save()
 	return redirect('/consignaciones/buscar')
+
+def eliminarconsignacion(request, term):
+	consig = Consignacion.objects.get(id=term)
+	consig.delete()
+	return redirect('/consignaciones/buscar')

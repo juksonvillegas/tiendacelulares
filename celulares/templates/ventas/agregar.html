@@ -56,7 +56,7 @@
 					<i class="material-icons prefix">attach_money</i>
 					<input  id="precio" name="precio" type="text" min="1" max="99" class="
 					validate left-align">
-					<label for="cantidad">Precio</label>
+					<label for="precio">Precio</label>
 				</div>
 			</div>
 			<div class="col l1">
@@ -77,6 +77,12 @@
 				<tr></tr>
 				</tbody>
 				</table>
+			</div>
+			<div class="row">
+				<input type="hidden" id="totaloculto" name="totaloculto" value="0">
+			</div>
+			<div class="row col l12 m10 offset-m2 s12 blue-grey">
+				<h5 id="total" class="white-text">Total: S/. 0</h5>
 			</div>
 			<div class="row col l4 offset-l8 m4 offset-m6 s10 offset-s2">
 				<button class="btn teal darken-4 waves-effect waves-light right " type="submit" name="action">Guardar<i class="material-icons right">send</i></button>
@@ -121,9 +127,16 @@
 			if($('#idproducto').val() !='' && $('#cantidad').val() != '' && $('#precio').val() != 'S/. 0.00'){
 				$('#items tr:last').after('<tr><td>' + $('#idproducto').val()
 				 + '</td><td>' + $('#producto').val()
-				 + '</td><td>'+ $('#cantidad').val()
-				 + '</td><td>'+ $('#precio').val()
-				 + '</td><td> <a id="borrar" onClick="eliminar_item(); return false;" class="btn-floating red"><i class="material-icons medium">delete</i></a></td></tr>');
+				 + '</td><td class="cantidad">'+ $('#cantidad').val()
+				 + '</td><td class="precio">'+ $('#precio').val()
+				 + '</td><td> <a id="borrar" onClick="eliminar_item(this); return false;" class="btn-floating red"><i class="material-icons medium">delete</i></a></td></tr>');
+				var total = parseFloat($('#totaloculto').val());
+				var precio = $('#precio').val()
+				var p = parseFloat(precio.substring(4));
+				var totalitem = parseInt($('#cantidad').val()) * p;
+				total += totalitem;
+				$('#totaloculto').val(total);
+				$('#total').text('Total: S/. ' + total );
 				$('#producto').val("");
 				$('#idproducto').val("");
 				$('#cantidad').val("");
@@ -136,8 +149,19 @@
 			}
 		};
 
-		function eliminar_item(){
-			$('#borrar').parent().parent().remove();
+		function eliminar_item(r){
+			var i = r.parentNode.parentNode.rowIndex;
+			var total = parseFloat($('#totaloculto').val());
+			var row = r.closest("tr");
+			var c = $(row).find('td').eq(2).html();
+			var precio = $(row).find('td').eq(3).html();
+			var p = parseFloat(precio.substring(4));
+			var totalitem = c * p;
+			console.log(totalitem);
+			total -= totalitem;
+			$('#totaloculto').val(total);
+			$('#total').text('Total: S/. ' + total );
+			document.getElementById("items").deleteRow(i);
 		};
 
 		function mostrarprecio(){
@@ -154,6 +178,28 @@
 					}
 				});
 			}
+		};
+
+		function calcular_total(){
+			$('#items tr').each(function () {
+				var cantidad = $(this).find('td').eq(2).html();
+				var precio = $(this).find('td').eq(3).html();
+				if(typeof cantidad != 'undefined' && typeof precio != 'undefined')
+ 				{
+ 					var cantidad = $(this).find('td').eq(2).html();
+					var precio = $(this).find('td').eq(3).html();
+					var p = precio.substring(4);
+					var preciocorregido = parseFloat(p);
+					var cantidadcorregido = parseInt(cantidad);
+					var total1 = cantidadcorregido * preciocorregido;
+					var total = parseFloat($('#totaloculto').val());
+					total += parseFloat(total1);
+					console.log(total1);
+					console.log(total);
+					$('#totaloculto').val(total);
+					$('#total').text("Total a pagar es: " + parseFloat(total));
+				}
+			});
 		};
 
 		function agregar_consignacion(){
