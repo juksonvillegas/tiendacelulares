@@ -49,6 +49,17 @@ def agregarcompras(request):
 
 @login_required(login_url='/')
 def listarcompras(request):
-	compra = Compra.objects.filter(estado = True).order_by('-fecha')
-	detalle = Compra_detalle.objects.all()
-	return render_to_response('compras/buscar.html', {'compras': compra, 'detalle':detalle}, context_instance=RequestContext(request))
+	try:
+		compra = Compra.objects.filter(estado = True).order_by('-fecha')[:10]
+		total = 0
+		detalle = []
+		for c in compra:
+			c.total = 0
+			items = Compra_detalle.objects.filter(compra = c)
+			for i in items:
+				i.subtotal = i.cantidad * i.costo
+				c.total += i.subtotal
+				detalle.append(i)
+		return render_to_response('compras/buscar.html', {'compras': compra, 'detalle':detalle}, context_instance=RequestContext(request))
+	except Compra.DoesNotExist:
+		return render_to_response('ventas/buscar.html', context_instance=RequestContext(request))

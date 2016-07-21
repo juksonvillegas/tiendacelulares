@@ -20,13 +20,13 @@
 						<spam class="right" >{{c.fecha|date:"d/m/Y P"}}</spam>
       				</div>
       				<div class="collapsible-body blue-grey lighten-4">
-
 						<table class="striped">
 							<thead>
 								<th data-field="categoria">Categoria</th>
 								<th data-field="producto">Producto</th>
 								<th data-field="cantidad">Cantidad</th>
                 <th data-field="Costo">Costo</th>
+								<th data-field="subtotal">Sub-Total</th>
 							</thead>
 							<tbody>
 							{%for d in detalle%}
@@ -36,9 +36,13 @@
 										<td>{{d.producto.nombre}}</td>
 										<td>{{d.cantidad}}</td>
                     <td>{{d.costo}}</td>
+										<td><h6>{{d.subtotal}}</h6></td>
 									</tr>
 								{% endif %}
 							{% endfor %}
+							<tr>
+								<td colspan="5"><h5>Total: {{c.total}}</h5></td>
+							</tr>
 							</tbody>
 						</table>
 						<div class="row white center blue-grey lighten-4">

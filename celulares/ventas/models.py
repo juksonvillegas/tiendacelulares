@@ -45,7 +45,7 @@ class Venta_detalle(models.Model):
 	precio = models.DecimalField(max_digits=5, decimal_places=2)
 
 	def __str__(self):
-		return str(self.fecha.strftime('%d-%m-%Y %H:%M'))
+		return str(self.producto.nombre)
 
 	def __unicode__(self):
-		return str(self.fecha.strftime('%d-%m-%Y %H:%M'))
+		return str(self.producto.nombre)
