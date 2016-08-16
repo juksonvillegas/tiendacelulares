@@ -33,7 +33,6 @@ class Compra_detalle(models.Model):
 
 @receiver(post_save, sender=Compra_detalle)
 def actualizar_stock_alamcen(instance, created, **kwargs):
-	print('signal registrada')
 	if created:
 		almacen = Almacen()
 		almacen.producto = instance.producto

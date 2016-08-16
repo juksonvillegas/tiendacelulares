@@ -14,12 +14,12 @@
 		<form action="" class="col l10 offset-l1" method="POST" id="venta-form">
 			{% csrf_token %}
 			<div class="row col s12 m8 offset-m2 l12">
-				<div class="input-field col l8 m8 s8">
+				<div class="input-field col l7 m8 s8">
 					<i class="material-icons prefix">search</i>
 					<input id="cliente" type="text" class="validate">
           			<label for="cliente">Selccionar cliente</label>
 				</div>
-				<div class="input-field col l4 m4 s4">
+				<div class="input-field col l5 m4 s4">
 					<input type="checkbox" class="filled-in" id="filled-in-box"/>
       				<label for="filled-in-box">Documentado</label>
 				</div>
@@ -28,19 +28,23 @@
 				</div>
 			</div>
 			<div class="row col s12 m8 offset-m2 l12">
-				<div class="input-field col l8 s12 m12 ">
+				<div class="input-field col l7 s12 m12 ">
 					<i class="material-icons prefix">search</i>
 					<input id="producto" type="text" class="validate">
           			<label for="producto">Seleccionar producto</label>
           			<input type="hidden" id="idproducto" name="idproducto" value="">
 				</div>
-        		<div class="input-field col s6 m6 l2">
+        		<div class="input-field col s4 m4 l2">
          			 <input disabled value="0.00" id="punto" type="text" class="validate">
          			 <label for="punto">Punto Venta</label>
         		</div>
-        		<div class="input-field col s6 m6 l2">
+        		<div class="input-field col s4 m4 l2">
          			 <input disabled value="0.00" id="pcliente" type="text" class="validate">
          			 <label for="cliente">Cliente</label>
+        		</div>
+						<div class="input-field col s4 m4 l1">
+         			 <input disabled value="0" id="stock" type="text" class="validate">
+         			 <label for="stock">Stock</label>
         		</div>
 			<div class="row col l12">
 				<div class="row col s4 m4 offset-m2 l3">
@@ -60,7 +64,7 @@
 				</div>
 			</div>
 			<div class="col l1">
-				<a onClick="agregar_item(); return false;" class="btn-floating green btn-large"><i class="material-icons">add</i></a>
+				<a id="botonagregar" class="btn-floating green btn-large"><i class="material-icons">add</i></a>
 			</div>
 			<div class="col l12 m10 offset-m2 s12">
 				<table id="items" class="responsive-table striped">
@@ -95,13 +99,15 @@
 	{% endblock %}
 	{% block script %}
 		$(document).ready(function(e){
+			var button = document.querySelector('#botonagregar');
+			button.addEventListener('click', agregar_item, false);
 			$('#cliente').focus();
 		});
 
 		$('#precio').keypress(function(e){
 			if (e.which == 43){
 				agregar_item();
-				e.preventDefault();
+				//e.preventDefault();
 			};
 		});
 
@@ -125,23 +131,55 @@
 
 		function agregar_item(){
 			if($('#idproducto').val() !='' && $('#cantidad').val() != '' && $('#precio').val() != 'S/. 0.00'){
-				$('#items tr:last').after('<tr><td>' + $('#idproducto').val()
-				 + '</td><td>' + $('#producto').val()
-				 + '</td><td class="cantidad">'+ $('#cantidad').val()
-				 + '</td><td class="precio">'+ $('#precio').val()
-				 + '</td><td> <a id="borrar" onClick="eliminar_item(this); return false;" class="btn-floating red"><i class="material-icons medium">delete</i></a></td></tr>');
-				var total = parseFloat($('#totaloculto').val());
-				var precio = $('#precio').val()
-				var p = parseFloat(precio.substring(4));
-				var totalitem = parseInt($('#cantidad').val()) * p;
-				total += totalitem;
-				$('#totaloculto').val(total);
-				$('#total').text('Total: S/. ' + total );
-				$('#producto').val("");
-				$('#idproducto').val("");
-				$('#cantidad').val("");
-				$('#precio').val("");
-				$('#producto').focus();
+			
+				if(parseInt($('#cantidad').val()) <= parseInt($('#stock').val())){
+					$('#items tr:last').after('<tr><td>' + $('#idproducto').val()
+					 + '</td><td>' + $('#producto').val()
+					 + '</td><td class="cantidad">'+ $('#cantidad').val()
+					 + '</td><td class="precio">'+ $('#precio').val()
+					 + '</td><td> <a id="borrar" onClick="eliminar_item(this); return false;" class="btn-floating red"><i class="material-icons medium">delete</i></a></td></tr>');
+					var total = parseFloat($('#totaloculto').val());
+					var $precio = $('#precio').val();
+					if($precio%1==0){
+						var p = parseFloat($precio);
+						console.log('por mouse');
+					}
+					else
+					{
+						var p = parseFloat($precio.substring(4));
+						console.log('por teclado');
+					}
+					var totalitem = parseInt($('#cantidad').val()) * p;
+					total += totalitem;
+					//ACA SE LLAMA A CALCULAR total
+					$('#items tr').each(function () {
+						var mcantidad = $(this).find('td').eq(2).html();
+						var mprecio = $(this).find('td').eq(3).html();
+						if(typeof mcantidad != 'undefined' && typeof mprecio != 'undefined')
+		 				{
+		 					var mcantidad = $(this).find('td').eq(2).html();
+							var mprecio2 = $(this).find('td').eq(3).html();
+							var mpreciocorregido = parseFloat(mprecio2);
+							var mcantidadcorregido = parseInt(mcantidad);
+							var mtotal1 = mcantidadcorregido * mpreciocorregido;
+							var mtotal = parseFloat($('#totaloculto').val());
+							mtotal += parseFloat(mtotal1);
+							$('#total').text('Total: S/.' + String(total));
+							$('#totaloculto').val(mtotal);
+						}
+					});
+					//ACA se limpia los text
+					$('#totaloculto').val(total);
+					$('#total').text('Total: S/. ' + total );
+					$('#producto').val("");
+					$('#idproducto').val("");
+					$('#cantidad').val("");
+					$('#precio').val("");
+					$('#producto').focus();
+				}
+				else{
+						Materialize.toast('No hay stock suficiente de ese producto.', 7000);
+				}
 			}
 			else
 			{
@@ -155,9 +193,14 @@
 			var row = r.closest("tr");
 			var c = $(row).find('td').eq(2).html();
 			var precio = $(row).find('td').eq(3).html();
-			var p = parseFloat(precio.substring(4));
+			if(precio % 1 ==0){
+				var p = parseFloat(precio);
+			}
+			else
+			{
+				var p = parseFloat(precio.substring(4));
+			}
 			var totalitem = c * p;
-			console.log(totalitem);
 			total -= totalitem;
 			$('#totaloculto').val(total);
 			$('#total').text('Total: S/. ' + total );
@@ -174,7 +217,9 @@
 					data: {'term':id},
 					success:function(data){
 						$('#punto').val(data.punto);
+						//aca se modifico cliente x stock
 						$('#pcliente').val(data.cliente);
+						$('#stock').val(data.stock);
 					}
 				});
 			}
@@ -187,17 +232,13 @@
 				if(typeof cantidad != 'undefined' && typeof precio != 'undefined')
  				{
  					var cantidad = $(this).find('td').eq(2).html();
-					var precio = $(this).find('td').eq(3).html();
-					var p = precio.substring(4);
-					var preciocorregido = parseFloat(p);
+					var precio2 = $(this).find('td').eq(3).html();
+					var preciocorregido = parseFloat(precio2);
 					var cantidadcorregido = parseInt(cantidad);
 					var total1 = cantidadcorregido * preciocorregido;
 					var total = parseFloat($('#totaloculto').val());
 					total += parseFloat(total1);
-					console.log(total1);
-					console.log(total);
 					$('#totaloculto').val(total);
-					$('#total').text("Total a pagar es: " + parseFloat(total));
 				}
 			});
 		};
@@ -250,7 +291,7 @@
 		$('#producto').keyup(function() {
 			var $producto = $('#producto');
   			$producto.autocomplete({
-    			source: "/productos/buscar-ajax2",
+    			source: "/almacen/buscar-ajax",
     			minLength: 2,
     			select: function (event, ui) {
         			$("#idproducto").val(ui.item.id);

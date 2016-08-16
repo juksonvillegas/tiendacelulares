@@ -1,6 +1,9 @@
 from __future__ import unicode_literals
 
+from django.dispatch import receiver
+from django.db.models.signals import post_save, post_delete
 from django.db import models
+from productos.models import Almacen
 
 # Create your models here.
 class Consignacion(models.Model):
@@ -49,3 +52,34 @@ class Venta_detalle(models.Model):
 
 	def __unicode__(self):
 		return str(self.producto.nombre)
+
+@receiver(post_save, sender=Venta_detalle)
+def actualizar_stock_alamcen(instance, created, **kwargs):
+	if created:
+		cantidad = instance.cantidad
+		items = Almacen.objects.filter(producto=instance.producto)
+		print("se capturo items de almacen")
+		for i in items:
+			if cantidad > 0:
+				if cantidad > i.stock:
+					print("cantidad mayor que producto")
+					cantidad -= i.stock
+					i.stock = 0
+					print("item estado false")
+				else:
+					print("cantidad menor o igual a producto")
+					i.stock -=cantidad
+					print("se resto la cantidad")
+					cantidad = 0
+				if i.stock == 0:
+					print("producto desactivado")
+					i.estado = False
+				i.save()
+
+@receiver(post_delete, sender=Venta_detalle)
+def retornar_stock_almacen(instance, deleted, **kwargs):
+	if deleted:
+		item = Almacen.objects.get(producto = instance.producto)
+		print('Se obtuvo el ultimo item eliminado')
+		item.stock += instance.cantidad
+		item.save()

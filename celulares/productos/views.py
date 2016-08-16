@@ -6,10 +6,11 @@ from django.views.generic import TemplateView
 from django.http import HttpResponse
 from django.template import RequestContext
 import json
-from .models import Categoria, Precio, Producto
+from .models import Categoria, Precio, Producto, Almacen
 import barcode
 from django.db.models import Q
 from django.core import serializers
+from django.db.models import Sum
 
 # Create your views here.
 @method_decorator(login_required, name='dispatch')
@@ -66,9 +67,11 @@ def buscarprecios2(request):
 		texto = request.GET['term']
 		if texto is not None:
 			p = Producto.objects.get(id = int(texto))
+			stock = Almacen.objects.filter(producto = p).aggregate(suma = Sum('stock'))
 			results = {}
 			results['punto'] = str(p.precio.punto)
 			results['cliente'] = str(p.precio.cliente)
+			results['stock'] = str(stock['suma'])
 			data = json.dumps(results)
 			return HttpResponse(data, content_type='application/json')
 
@@ -128,6 +131,22 @@ def buscarproductos2(request):
 				producto_json['id'] = producto.id
 				producto_json['label'] = producto.categoria.nombre + " " + producto.nombre
 				producto_json['value'] = producto.categoria.nombre + " " +producto.nombre
+				results.append(producto_json)
+			data = json.dumps(results)
+			return HttpResponse(data, content_type="application/json")
+
+@login_required(login_url='/')
+def buscarproductos3(request):
+	if request.is_ajax():
+		texto = request.GET['term']
+		if texto is not None:
+			productos = Almacen.objects.filter(Q(estado = True) & (Q(producto__barras__contains = texto) | Q(producto__nombre__contains = texto) | Q(producto__categoria__nombre__contains = texto))).distinct('producto__nombre')[:10]
+			results = []
+			for producto in productos:
+				producto_json = {}
+				producto_json['id'] = producto.producto.id
+				producto_json['label'] = producto.producto.categoria.nombre + " " + producto.producto.nombre
+				producto_json['value'] = producto.producto.categoria.nombre + " " +producto.producto.nombre
 				results.append(producto_json)
 			data = json.dumps(results)
 			return HttpResponse(data, content_type="application/json")
