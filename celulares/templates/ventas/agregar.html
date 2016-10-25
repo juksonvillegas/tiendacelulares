@@ -16,7 +16,7 @@
 			<div class="row col s12 m8 offset-m2 l12">
 				<div class="input-field col l7 m8 s8">
 					<i class="material-icons prefix">search</i>
-					<input id="cliente" type="text" class="validate">
+					<input id="cliente" placeholder="Ejem: guido garcia." type="text" class="validate">
           			<label for="cliente">Selccionar cliente</label>
 				</div>
 				<div class="input-field col l5 m4 s4">
@@ -102,6 +102,7 @@
 			var button = document.querySelector('#botonagregar');
 			button.addEventListener('click', agregar_item, false);
 			$('#cliente').focus();
+
 		});
 
 		$('#precio').keypress(function(e){
@@ -131,7 +132,7 @@
 
 		function agregar_item(){
 			if($('#idproducto').val() !='' && $('#cantidad').val() != '' && $('#precio').val() != 'S/. 0.00'){
-			
+
 				if(parseInt($('#cantidad').val()) <= parseInt($('#stock').val())){
 					$('#items tr:last').after('<tr><td>' + $('#idproducto').val()
 					 + '</td><td>' + $('#producto').val()
@@ -264,7 +265,10 @@
 					success: function(respuesta){
 						if(respuesta == 'Consignacion registrada correctamente.')
 						{
+							$('#totaloculto').val("");
+							$('#total').text("");
 							$('#venta-form')[0].reset();
+							$('#cliente').text("");
 							$('#cliente').focus();
 						}
 						Materialize.toast(respuesta, 7000);

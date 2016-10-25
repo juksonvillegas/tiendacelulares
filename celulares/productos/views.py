@@ -33,6 +33,10 @@ class buscarprecio(TemplateView):
 class buscarproducto(TemplateView):
 	template_name = 'productos/buscar.html'
 
+@method_decorator(login_required, name='dispatch')
+class buscaralmacen(TemplateView):
+	template_name = 'productos/almacen_buscar.html'
+
 @login_required(login_url='/')
 def buscarcategorias(request):
 	if request.is_ajax():
@@ -85,9 +89,25 @@ def buscarproductos(request):
 			if texto == 'listar':
 				producto = Producto.objects.all().order_by('nombre')
 			for p in producto:
-				lista.append({'nombre':p.categoria.nombre + p.nombre , 'categoria':p.categoria.nombre,'preciopunto': str(p.precio.punto), 'preciocliente': str(p.precio.cliente) , 'stock':p.stock, 'barras':p.barras})
+				#esta linea se modifico para que al listar productos se vea bonito
+				lista.append({'nombre':p.nombre , 'categoria':p.categoria.nombre,'preciopunto': str(p.precio.punto), 'preciocliente': str(p.precio.cliente) , 'stock':p.stock, 'barras':p.barras})
 			data = json.dumps(lista)
 			return HttpResponse(data, content_type='application/json')
+
+@login_required(login_url='/')
+def buscaralmacen2(request):
+	if request.is_ajax():
+		texto = request.GET['term']
+		if texto is not None:
+			almacen = Almacen.objects.filter(Q(producto__nombre__contains = texto)| Q(producto__categoria__nombre__contains = texto) | Q(producto__barras__contains = texto))
+			lista = []
+			if texto == 'listar':
+				almacen = Almacen.objects.all().order_by('producto__nombre')
+			for a in almacen:
+				lista.append({'nombre':a.producto.nombre , 'categoria':a.producto.categoria.nombre,'preciopunto': str(a.producto.precio.punto), 'preciocliente': str(a.producto.precio.cliente) , 'stock':a.stock, 'barras':a.producto.barras})
+			data = json.dumps(lista)
+			return HttpResponse(data, content_type='application/json')
+
 
 @login_required(login_url='/')
 def agregarproducto(request):

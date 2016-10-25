@@ -1,0 +1,68 @@
+{% extends "base.html"%}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>{% block title%}Buscar Productos{%endblock%}</title>
+</head>
+<body>
+	{% block titulo1 %}Buscar Productos{% endblock %}
+	{% block titulo %}Buscar Productos{% endblock %}
+	{%block contenido%}
+	{% csrf_token %}
+	<div class="row">
+		<form action="">
+			<table>
+				<tbody>
+					<tr>
+						<td>
+							<nav>
+    							<div class="nav-wrapper blue-grey">
+      								<form>
+	        							<div class="input-field">
+	          								<input id="texto" type="search" required placeholder="Buscar">
+	          								<label for="search"><i class="material-icons">search</i></label>
+	          								<i class="material-icons">close</i>
+	        							</div>
+      								</form>
+    							</div>
+ 							</nav>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
+	</div>
+	<div id="tabla">
+	</div>
+	{%endblock%}
+	{% block script%}
+		$('#texto').keyup(function(){
+			var texto = $('#texto').val();
+			if(texto.length > 1){
+				$.ajax({
+					data: {'term':texto},
+					url: "/almacen/buscar-ajax2",
+					type: "get",
+					success: function(data){
+						var cabecera, footer;
+						var filas='';
+						cabecera = '<table class="responsive-table striped"><thead><tr><th data-field="nombre">Nombre</th><th data-field="categoria">Categoria</th><th data-field="precio.punto">P.V</th><th data-field="precio.cliente">P. Cliente</th><th data-field="stock">Stock</th><th data-field="barras">Codigo de Barras</th></tr></thead><tbody>';
+						footer = '</tbody></table>';
+						for(var i = 0; i<data.length; i++){
+							filas+='<tr><td>'+data[i].nombre +
+							'</td><td>'+data[i].categoria +
+							'</td><td>'+data[i].preciopunto +
+							'</td><td>'+data[i].preciocliente +
+							'</td><td>'+data[i].stock+
+							'</td><td>'+data[i].barras+
+							'</td></tr>';
+						}
+						$('#tabla').html(cabecera+filas+footer);
+					}
+				});
+			}
+		});
+	{% endblock %}
+</body>
+</html>

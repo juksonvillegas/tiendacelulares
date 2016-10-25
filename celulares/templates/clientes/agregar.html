@@ -15,7 +15,7 @@
 			{% csrf_token %}
 			<div class="row">
 				<div class="input-field col s4 m4 offset-m4 l2 offset-l2">
-					<input  id="dni" name="dni"type="text" class="
+					<input  id="dni" placeholder="Ejem. 03648098" name="dni"type="text" class="
 					validate left-align ">
 					<label for="dni"> DNI</label>
 				</div>
@@ -64,7 +64,7 @@
 			</div>
 			<div class="col l6 offset-l2 m4 offset-m4 s6">
 					<input type="checkbox" class="filled-in" id="filled-in-box" 	 />
-      				<label for="filled-in-box">Punto de venta</label>		
+      				<label for="filled-in-box">Punto de venta</label>
 				</div>
 			<div class="row col l4 offset-l6 m4 offset-m8 s10 offset-s2">
 				<button class="btn teal darken-4 waves-effect waves-light right " type="submit" name="action">Guardar<i class="material-icons right">send</i></button>
@@ -79,19 +79,19 @@
     		$('#nacimiento').mask("99-99-9999");
     		$('#telefono').mask("999999999");
 		});
-		
+
 		$('#cliente-form').on('submit', function(event){
    			event.preventDefault();
     		console.log("form submitted!")  // sanity check
     		agregar_cliente();
 		});
-		
+
 		function agregar_cliente(){
 			console.log('agregar cliente funcionando');
 			$.ajax({
 				url : "agregar-ajax",
 				type : "POST",
-				data : { 'dni' : $('#dni').val(), 'nombre' : $('#nombre').val(), 'nacimiento' : $('#nacimiento').val(), 'sexo': $('#opcion').val(), 'direccion' : $('#direccion').val(), 'email': $('#email').val(), 'telefono': $('#telefono').val(), 'puntoventa': $('#filled-in-box').is(':checked')}, 
+				data : { 'dni' : $('#dni').val(), 'nombre' : $('#nombre').val(), 'nacimiento' : $('#nacimiento').val(), 'sexo': $('#opcion').val(), 'direccion' : $('#direccion').val(), 'email': $('#email').val(), 'telefono': $('#telefono').val(), 'puntoventa': $('#filled-in-box').is(':checked')},
 				success: function(respuesta){
 					if(respuesta == 'Cliente registrado correctamente.')
 					{

@@ -14,10 +14,10 @@
 		<form action="" class="col l10 offset-l1" method="POST" id="preventa-form">
 			{% csrf_token %}
 			<div class="row col s12 m8 offset-m2 l12">
-				<div class="input-field">
-					<i class="material-icons prefix">search</i>
-					<input id="cliente" type="text" class="validate">
-          			<label for="cliente">Selccionar cliente</label>
+				<div class="input-field col l7 m8 s8">
+					<i id="icocliente" class="material-icons prefix">search</i>
+					<input id="cliente" placeholder="Ejem: guido garcia." type="text" class="validate">
+						<label for="cliente">Selccionar cliente</label>
 				</div>
 				<div class="row">
 					<input type="hidden" id="idcliente" name="idcliente" value="">
@@ -130,7 +130,7 @@
  				$.ajax({
 					url : "agregar-ajax",
 					type : "POST",
-					data : {'cliente':$('#idcliente').val(), 'lista[]':datos, 'nota':$('#nota').val()}, 
+					data : {'cliente':$('#idcliente').val(), 'lista[]':datos, 'nota':$('#nota').val()},
 					success: function(respuesta){
 						if(respuesta == 'Consignacion registrada correctamente.')
 						{
@@ -154,16 +154,28 @@
   			$cliente.autocomplete({
     			source: "/clientes/buscar-ajax2",
     			minLength: 2,
-    			select: function (event, ui) {
-        			$("#idcliente").val(ui.item.id);
-    			}
+					autoFocus: true,
+					autoSelect: true,
+					change: function (event, ui){
+						if(ui.item){
+							$("#idcliente").val(ui.item.id);
+							$("#icocliente").text("done");
+						}
+						else {
+							$("#idcliente").val('null');
+							$("#icocliente").text("search");
+						}
+					}
   			});
+				$id = $("#idcliente").val();
 		});
 		$('#producto').keyup(function() {
 			var $producto = $('#producto');
   			$producto.autocomplete({
     			source: "/productos/buscar-ajax2",
     			minLength: 2,
+					autoFocus: true,
+					autoSelect: true,
     			select: function (event, ui) {
         			$("#idproducto").val(ui.item.id);
     			}
