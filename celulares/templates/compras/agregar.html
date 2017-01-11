@@ -15,8 +15,8 @@
 			{% csrf_token %}
 			<div class="row col s12 m8 offset-m2 l12">
 				<div class="input-field col l8 m8 s8">
-					<i class="material-icons prefix">search</i>
-					<input id="proveedor" type="text" class="validate">
+					<i id="icoproveedor" class="material-icons prefix">search</i>
+					<input id="proveedor" placeholder="Ej. samuel" type="text" class="validate">
           			<label for="proveedor">Seleccionar Proveedor</label>
 				</div>
 				<div class="input-field col l4 m4 s4">
@@ -101,7 +101,7 @@
 
 		$(document).ready(function(){
 			$('#costo').maskMoney({
-				prefix: 'S/. ',
+				//prefix: 'S/. ',
 				allowZero: false,
 				allowNegative: false,
 				thousands: ' ',
@@ -196,9 +196,18 @@
   			$proveedor.autocomplete({
     			source: "/proveedores/buscar-ajax2",
     			minLength: 2,
-    			select: function (event, ui) {
-        			$("#idproveedor").val(ui.item.id);
-    			}
+					autoFocus: true,
+					autoSelect: true,
+					change: function (event, ui){
+						if(ui.item){
+							$("#idproveedor").val(ui.item.id);
+							$("#icoproveedor").text("done");
+						}
+						else {
+							$("#idproveedor").val('null');
+							$("#icoproveedor").text("search");
+						}
+					}
   			});
 		});
 

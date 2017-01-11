@@ -1,0 +1,113 @@
+
+{% extends "base.html"%}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>{% block title%}Agregar Proveedores{%endblock%}</title>
+</head>
+<body>
+	{% block titulo1 %}Agregar Usuarios{% endblock %}
+	{% block titulo %}Agregar Usuarios{% endblock %}
+	{%block contenido%}
+		<div class="row">
+			<form action="" method="POST" id="usuario-form" class="col s12">
+			{% csrf_token %}
+				<div class="row">
+					<div class="input-field col s12 m3 offset-m3 l3 offset-l3">
+						<input id="usuario" name="usuario" type="text" class="
+						validate left-align" placeholder="Nombre de usuario" >
+						<label for="usuario">Usuario</label>
+					</div>
+					<div class="input-field col s12 m3 l3">
+						<input id="password" name="password"type="password" class="
+						validate left-align ">
+						<label for="password">Contraseña</label>
+					</div>
+					<div class="input-field col s12 m6 offset-m3 l6 offset-l3">
+						<input id="nombre" name="nombre"type="text" class="
+						validate ">
+						<label for="nombre">Nombres completos</label>
+					</div>
+					<div class="input-field col s12 m6 offset-m3 l6 offset-l3">
+						<input id="email" name="email"type="text" class="
+						validate ">
+						<label for="email">E-mail</label>
+					</div>
+					<div class="input-field col s12 m6 offset-m3 l6 offset-l3">
+						<input id="direccion" name="direccion"type="text" class="
+						validate left-align ">
+						<label for="direccion">Dirección</label>
+					</div>
+					<div class="input-field col s12 m3 offset-m3 l2 offset-l3 ">
+						<input id="telefono" name="telefono"type="text" class="
+						validate left-align ">
+						<label for="telefono">Teléfono</label>
+					</div>
+					<div class="input-field col s12 m6 offset-m3 l5 offset-l3">
+						<input id="foto" name="foto"type="text" class="
+						validate left-align ">
+						<label for="foto">Foto</label>
+					</div>
+					<div class="col l1 m6 offset-m3 s6">
+						<img class="materialboxed" data-caption="Imagen de perfil" id="perfil"
+						width="100%" height="100%" src="http://i.imgur.com/Ol2BxOP.png">
+					</div>
+					<div class="col l6 offset-l3 m6 offset-m3 s6">
+							<input type="checkbox" class="filled-in" id="filled-in-box" 	 />
+		      				<label for="filled-in-box">Administrador</label>
+					</div>
+					<div class="row col l3 offset-l6 m3 offset-m6 s10 offset-s2">
+						<button class="btn teal darken-4 waves-effect waves-light right " type="submit" name="action">Guardar<i class="material-icons right">send</i></button>
+					</div>
+				</div>
+			</form>
+	</div>
+	{%endblock%}
+	{% block script%}
+		$(document).ready(function() {
+				//$("#perfil").attr("src","http://i.imgur.com/Ol2BxOP.png");
+				$('#telefono').mask("999999999");
+				$('#usuario').focus();
+				$("#foto").change(function(){
+						if($("#foto").val()==''){
+							$("#perfil").attr("src","http://i.imgur.com/Ol2BxOP.png");
+						}
+						else {
+							url = $("#foto").val();
+							$("#perfil").attr("src",$("#foto").val());
+						}
+
+				});
+		});
+		function agregar_usuario(){
+			console.log('agregar usuario funcionando');
+			console.log($('#filled-in-box').is(':checked'));
+			$.ajax({
+				url : "agregar-ajax",
+				type : "POST",
+				data : { 'usuario' : $('#usuario').val(),
+				'password' : $('#password').val(),'nombre' : $('#nombre').val(),
+				'email': $('#email').val(),'direccion': $('#direccion').val(),
+				 'telefono': $('#telefono').val(), 'foto': $('#foto').val(),
+				  'administrador': $('#filled-in-box').is(':checked')
+			},
+				success: function(respuesta){
+					if(respuesta == 'usuario registrado correctamente.')
+					{
+						$('#usuario-form')[0].reset();
+						$('#usuario').focus();
+					}
+					Materialize.toast(respuesta, 5000);
+				}
+			});
+		};
+		$('#usuario-form').on('submit', function(event){
+   			event.preventDefault();
+    		console.log("form submitted!")  // sanity check
+    		agregar_usuario();
+		});
+
+	{% endblock %}
+	</body>
+</html>

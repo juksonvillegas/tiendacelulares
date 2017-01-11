@@ -8,7 +8,7 @@ class ManagerUsuarios(BaseUserManager):
 		if not email:
 			raise ValueError("El email es obligatorio")
 		email = self.normalize_email(email)
-		user = self.model(usuario = usuario, email = email, is_active = True, 
+		user = self.model(usuario = usuario, email = email, is_active = True,
 			is_staff = is_staff, is_superuser = is_superuser, **extra_fields)
 		user.set_password(password)
 		user.save(using = self._db)
@@ -25,7 +25,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 	usuario = models.CharField(max_length = 50, unique = True) #ok
 	email = models.EmailField(max_length = 50, unique = True) #ok
 	nombre = models.CharField(max_length = 200) #ok
-	direccion = models.CharField(max_length = 250, default = "su casa") 
+	direccion = models.CharField(max_length = 250, default = "su casa")
 	telefono = models.CharField(max_length = 9, default = "968072613") #ok
 	foto = models.URLField() #ok
 

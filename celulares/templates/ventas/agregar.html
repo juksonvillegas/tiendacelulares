@@ -15,7 +15,7 @@
 			{% csrf_token %}
 			<div class="row col s12 m8 offset-m2 l12">
 				<div class="input-field col l7 m8 s8">
-					<i class="material-icons prefix">search</i>
+					<i id="icocliente" class="material-icons prefix">search</i>
 					<input id="cliente" placeholder="Ejem: guido garcia." type="text" class="validate">
           			<label for="cliente">Selccionar cliente</label>
 				</div>
@@ -114,7 +114,7 @@
 
 		$(document).ready(function(){
 			$('#precio').maskMoney({
-				prefix: 'S/. ',
+				//prefix: 'S/. ',
 				allowZero: false,
 				allowNegative: false,
 				thousands: ' ',
@@ -140,17 +140,8 @@
 					 + '</td><td class="precio">'+ $('#precio').val()
 					 + '</td><td> <a id="borrar" onClick="eliminar_item(this); return false;" class="btn-floating red"><i class="material-icons medium">delete</i></a></td></tr>');
 					var total = parseFloat($('#totaloculto').val());
-					var $precio = $('#precio').val();
-					if($precio%1==0){
-						var p = parseFloat($precio);
-						console.log('por mouse');
-					}
-					else
-					{
-						var p = parseFloat($precio.substring(4));
-						console.log('por teclado');
-					}
-					var totalitem = parseInt($('#cantidad').val()) * p;
+					var $precio = parseFloat($('#precio').val());
+					var totalitem = parseInt($('#cantidad').val()) * $precio;
 					total += totalitem;
 					//ACA SE LLAMA A CALCULAR total
 					$('#items tr').each(function () {
@@ -160,11 +151,17 @@
 		 				{
 		 					var mcantidad = $(this).find('td').eq(2).html();
 							var mprecio2 = $(this).find('td').eq(3).html();
+							console.log(mcantidad);
+							console.log(mprecio2);
 							var mpreciocorregido = parseFloat(mprecio2);
 							var mcantidadcorregido = parseInt(mcantidad);
+							console.log(mpreciocorregido);
+							console.log(mcantidadcorregido);
 							var mtotal1 = mcantidadcorregido * mpreciocorregido;
 							var mtotal = parseFloat($('#totaloculto').val());
+							console.log(mtotal1);
 							mtotal += parseFloat(mtotal1);
+							console.log(mtotal);
 							$('#total').text('Total: S/.' + String(total));
 							$('#totaloculto').val(mtotal);
 						}
@@ -286,9 +283,18 @@
   			$cliente.autocomplete({
     			source: "/clientes/buscar-ajax3",
     			minLength: 2,
-    			select: function (event, ui) {
-        			$("#idcliente").val(ui.item.id);
-    			}
+					autoFocus: true,
+					autoSelect: true,
+					change: function (event, ui){
+						if(ui.item){
+							$("#idcliente").val(ui.item.id);
+							$("#icocliente").text("done");
+						}
+						else {
+							$("#idcliente").val('null');
+							$("#icocliente").text("search");
+						}
+					}
   			});
 		});
 

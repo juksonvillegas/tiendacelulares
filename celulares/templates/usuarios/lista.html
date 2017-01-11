@@ -7,9 +7,39 @@
 	<title>{% block title %}Bienvenido{% endblock %}</title>
 </head>
 <body>
-	{%block content%}
 	{% csrf_token %}
-	<div class="slider">
+	{% block titulo1 %}Lista de usuarios{% endblock %}
+	{% block titulo %}Lista de usuarios{% endblock %}
+	{%block contenido%}
+		<div class="row">
+		<ul class="collection">
+			{% for u in usuarios %}
+				<li class="collection-item avatar">
+					<img src={{u.foto}} height="100" width="100" alt="" class="circle">
+					<span class="title">
+						<h4>{{u.usuario|upper}}</h4>
+					</span>
+					<p>
+					{{u.nombre|title}}
+					<br>
+					{% if u.is_staff %}
+						Administrador
+					{% else %}
+						Vendedor
+					{% endif %}
+					<br>
+					{{u.email}}
+					<br>
+					{{u.direccion}}
+					<br>
+					{{u.telefono}}
+					</p>
+					<a href="#!" class="secondary-content"><i class="material-icons">edit</i></a>
+				</li>
+			{% endfor %}
+		</ul>
+		</div>
+	<!--<div class="slider">
 		<ul class="slides">
 				<li>
 					<img src="{% static 'img/negocio1.jpg' %}" alt="">
@@ -36,8 +66,8 @@
 					</div>
 				</li>
 		</ul>
-	</div>
-	{%endblock%}
+	</div>-->
+	{% endblock %}
 	{% block script %}
 		$(document).ready(function(){
 			$('.slider').slider();

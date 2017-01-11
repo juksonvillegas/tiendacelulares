@@ -15,10 +15,10 @@
 			<ul class="collapsible collapsible-accordion">
 				<li><a href="/logout/" class="waves-effect waves-light btn right red lighten-3 z-depth-1"><i class="tiny material-icons">power_settings_new</i></a></li>
 				<li>
-					<a class="collapsible-header">{{ request.user }} <i class="mdi-navigation-arrow-drop-down"></i></a>
+					<a class="collapsible-header">{{ request.user|upper }} <i class="mdi-navigation-arrow-drop-down"></i></a>
 					<div class="collapsible-body">
 						<ul>
-							<li class="center"><img src={{ request.user.foto }} class="circle"></li>
+							<li class="center"><img width="50%" height="50%" src={{ request.user.foto }} class="circle"></li>
 							<li class="center" >
 								{% if request.user.is_staff %}
 									Administrador

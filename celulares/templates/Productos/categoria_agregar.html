@@ -14,7 +14,7 @@
 			{% csrf_token %}
 			<div class="row">
 				<div class="input-field col s12 m8 offset-m2 l8 offset-l2">
-					<input  id="nombre" name="nombre"type="text" class="
+					<input  id="nombre" placeholder="Ej. Flipcover" name="nombre"type="text" class="
 					validate left-align ">
 					<label for="nombre"> Nombre de categoria</label>
 				</div>
@@ -32,19 +32,23 @@
 	</div>
 	{%endblock%}
 	{% block script%}
-		
+
+	$(document).ready(function(){
+		$('#nombre').focus();
+	});
+
 		$('#categoria-form').on('submit', function(event){
    			event.preventDefault();
     		console.log("form submitted!")  // sanity check
     		agregar_categoria();
 		});
-		
+
 		function agregar_categoria(){
 			console.log('agregar categoria funcionando');
 			$.ajax({
 				url : "agregar-ajax",
 				type : "POST",
-				data : { 'nombre' : $('#nombre').val(), 'descripcion' : $('#descripcion').val()}, 
+				data : { 'nombre' : $('#nombre').val(), 'descripcion' : $('#descripcion').val()},
 				success: function(respuesta){
 					if(respuesta == 'Categoria registrada correctamente.')
 					{

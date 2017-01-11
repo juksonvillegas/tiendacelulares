@@ -42,9 +42,11 @@ def agregarventas(request):
 
 				if isfloat(precio):
 					print('precio sin s/.')
+					pr = float(precio)
 				else:
 					print('precio con s/.')
-				pr = float(precio[4:])
+					pr = float(precio[4:])
+
 				vd = Venta_detalle(venta=venta, producto=p, cantidad=c, precio=pr)
 				#vd.save()
 			respuesta = "Venta registrada correctamente."

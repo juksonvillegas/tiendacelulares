@@ -33,7 +33,7 @@ def agregarcompras(request):
 				p = Producto.objects.get(id = int(l[0]))
 				c = int(l[1])
 				costo = l[2]
-				cs = float(costo[4:])
+				cs = float(costo)
 				cd = Compra_detalle(compra=compra, producto=p, cantidad=c, costo=cs)
 				cd.save()
 			respuesta = "Compra registrada correctamente."

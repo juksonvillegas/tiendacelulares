@@ -14,7 +14,7 @@
 			{% csrf_token %}
 			<div class="row">
 				<div class="input-field col s10 m8 offset-m2 l2 offset-l2">
-					<input  id="cliente" name="cliente"type="text" class="
+					<input  id="cliente" value=0 name="cliente"type="text" class="
 					validate left-align ">
 					<label for="cliente"> Precio Cliente</label>
 				</div>
@@ -53,6 +53,7 @@
 				affixesStay : false,
 				symbolPosition : 'left'
 			});
+			$('#cliente').focus();
 		});
 
 		$('#precios-form').on('submit', function(event){
@@ -66,7 +67,7 @@
 			$.ajax({
 				url : "agregar-ajax",
 				type : "POST",
-				data : { 'cliente' : $('#cliente').val(), 'punto' : $('#punto').val(), 'descripcion' : $('#descripcion').val() }, 
+				data : { 'cliente' : $('#cliente').val(), 'punto' : $('#punto').val(), 'descripcion' : $('#descripcion').val() },
 				success: function(respuesta){
 					if(respuesta == 'Precio registrado correctamente.')
 					{
