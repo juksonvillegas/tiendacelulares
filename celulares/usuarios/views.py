@@ -76,7 +76,7 @@ def crearusuario(request):
             usuario.telefono = telefono
             usuario.foto = foto
             usuario.is_staff = is_staff
-            #usuario.save()
+            usuario.save()
             respuesta = "Usuario registrado correctamente."
         except ValueError:
             respuesta = "Error: "

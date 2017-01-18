@@ -4,6 +4,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.template import RequestContext
 import json
 from .models import Categoria, Precio, Producto, Almacen
@@ -90,7 +91,7 @@ def buscarproductos(request):
 				producto = Producto.objects.all().order_by('nombre')
 			for p in producto:
 				#esta linea se modifico para que al listar productos se vea bonito
-				lista.append({'nombre':p.nombre , 'categoria':p.categoria.nombre,'preciopunto': str(p.precio.punto), 'preciocliente': str(p.precio.cliente) , 'stock':p.stock, 'barras':p.barras})
+				lista.append({'id':p.id , 'nombre':p.nombre , 'categoria':p.categoria.nombre,'preciopunto': str(p.precio.punto), 'preciocliente': str(p.precio.cliente) , 'stock':p.stock, 'barras':p.barras})
 			data = json.dumps(lista)
 			return HttpResponse(data, content_type='application/json')
 
@@ -202,6 +203,39 @@ def agregarproductos(request):
 			)
 
 @login_required(login_url='/')
+def editarproductos(request):
+	if request.method == 'POST':
+		try:
+			campo = 'Error producto sin id'
+			pid = request.POST.get('id')
+			producto = Producto.objects.get(id=pid)
+			campo = 'Debe seleccionar categoria'
+			pcategoria = int(request.POST.get('categoria'))
+			campo = 'Debe seleccionar precio'
+			pprecio = int(request.POST.get('precio'))
+			campo = 'Debe ingresar nombre para el producto'
+			pnombre = request.POST.get('nombre')
+			pcategoria = Categoria.objects.get(id = pcategoria)
+			pprecio = Precio.objects.get(id = pprecio)
+			producto.categoria= pcategoria
+			producto.precio = pprecio
+			producto.nombre = pnombre
+			print('Todos los datos recibidos correctamente')
+			print(producto)
+			producto.save()
+			respuesta = "Producto editado correctamente."
+		except ValueError:
+			respuesta = "Error: "
+			respuesta =respuesta + campo
+		except Exception as ex:
+			respuesta = str(ex.message)
+		finally:
+			return HttpResponse(
+				json.dumps(respuesta),
+				content_type="application/json"
+			)
+
+@login_required(login_url='/')
 def agregarprecios(request):
 	if request.method == 'POST':
 		try:
@@ -254,3 +288,10 @@ def agregaralmacen(request):
 				json.dumps(respuesta),
 				content_type="application/json"
 			)
+
+@login_required(login_url='/')
+def editarproducto(request, term):
+	producto = Producto.objects.get(id = term)
+	categorias = Categoria.objects.all().order_by('nombre')
+	precios = Precio.objects.all().order_by('descripcion')
+	return render_to_response('productos/editar.html', {'producto':producto, 'categorias':categorias, 'precios':precios}, context_instance=RequestContext(request))
