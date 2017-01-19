@@ -43,15 +43,16 @@
 				$.ajax({
 					data: {'term':texto},
 					url: "/categorias/buscar-ajax",
-					type: "get",				
+					type: "get",
 					success: function(data){
 						var cabecera, footer;
 						var filas='';
-						cabecera = '<table class="responsive-table striped"><thead><tr><th data-field="nombre">Nombre</th><th data-field="descripcion">Descripcion</th></tr></thead><tbody>';
+						cabecera = '<table class="responsive-table striped"><thead><tr><th data-field="nombre">Nombre</th><th data-field="descripcion">Descripcion</th><th data-field="editar">Editar</th></tr></thead><tbody>';
 						footer = '</tbody></table>';
 						for(var i = 0; i<data.length; i++){
-							filas+='<tr><td>'+data[i].nombre + 
-							'</td><td>'+data[i].descripcion + 
+							filas+='<tr><td>'+data[i].nombre +
+							'</td><td>'+data[i].descripcion +
+							'</td><td>'+'<a href="/categorias/editar/'+ data[i].id +'"> <i class="material-icons">edit</i> </a>'+
 							'</td></tr>';
 						}
 						$('#tabla').html(cabecera+filas+footer);

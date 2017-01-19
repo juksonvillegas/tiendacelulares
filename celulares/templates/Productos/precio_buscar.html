@@ -43,16 +43,17 @@
 				$.ajax({
 					data: {'term':texto},
 					url: "/precios/buscar-ajax",
-					type: "get",				
+					type: "get",
 					success: function(data){
 						var cabecera, footer;
 						var filas='';
-						cabecera = '<table class="responsive-table striped"><thead><tr><th data-field="descripcion">Descripcion</th><th data-field="punto">Punto de venta</th><th data-field="cliente">Cliente</th></tr></thead><tbody>';
+						cabecera = '<table class="responsive-table striped"><thead><tr><th data-field="descripcion">Descripcion</th><th data-field="punto">Punto de venta</th><th data-field="cliente">Cliente</th><th data-field="cliente">Editar</th></tr></thead><tbody>';
 						footer = '</tbody></table>';
 						for(var i = 0; i<data.length; i++){
-							filas+='<tr><td>'+data[i].descripcion + 
-							'</td><td>'+data[i].punto + 
-							'</td><td>'+data[i].cliente + 
+							filas+='<tr><td>'+data[i].descripcion +
+							'</td><td>'+data[i].punto +
+							'</td><td>'+data[i].cliente +
+							'</td><td>'+'<a href="/precios/editar/'+ data[i].id +'"> <i class="material-icons">edit</i> </a>'+
 							'</td></tr>';
 						}
 						$('#tabla').html(cabecera+filas+footer);

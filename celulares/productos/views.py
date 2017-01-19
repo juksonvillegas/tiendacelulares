@@ -48,7 +48,7 @@ def buscarcategorias(request):
 			if texto == 'listar':
 				categoria = Categoria.objects.all().order_by('nombre')
 			for c in categoria:
-				lista.append({'nombre':c.nombre, 'descripcion':c.descripcion})
+				lista.append({'id':c.id, 'nombre':c.nombre, 'descripcion':c.descripcion})
 			data = json.dumps(lista)
 			return HttpResponse(data, content_type='application/json')
 
@@ -62,7 +62,7 @@ def buscarprecios(request):
 			if texto == 'listar':
 				precio = Precio.objects.all().order_by('descripcion')
 			for p in precio:
-				lista.append({'descripcion':p.descripcion, 'punto': str(p.punto), 'cliente': str(p.cliente)})
+				lista.append({'id':p.id, 'descripcion':p.descripcion, 'punto': str(p.punto), 'cliente': str(p.cliente)})
 			data = json.dumps(lista)
 			return HttpResponse(data, content_type='application/json')
 
@@ -115,6 +115,32 @@ def agregarproducto(request):
 	categorias = Categoria.objects.all().order_by('nombre')
 	precios = Precio.objects.all().order_by('descripcion')
 	return render_to_response('productos/agregar.html', {'categorias':categorias, 'precios':precios}, context_instance=RequestContext(request))
+
+@login_required(login_url='/')
+def editarcategorias(request):
+	if request.method == 'POST':
+		try:
+			campo = 'Error producto sin id'
+			pid = request.POST.get('id')
+			categoria = Categoria.objects.get(id=pid)
+			campo = 'Debe ingresar el nombre de la categoria'
+			nombre = request.POST.get('nombre')
+			campo = 'Debe ingresar una descripcion de la categoria'
+			descripcion = request.POST.get('descripcion')
+			categoria.nombre = nombre
+			categoria.descripcion = descripcion
+			categoria.save()
+			respuesta = "Categoria editada correctamente."
+		except ValueError:
+			respuesta = "Error: "
+			respuesta =respuesta + campo
+		except Exception as ex:
+			respuesta = str(ex.message)
+		finally:
+			return HttpResponse(
+				json.dumps(respuesta),
+				content_type="application/json"
+			)
 
 @login_required(login_url='/')
 def agregarcategorias(request):
@@ -236,6 +262,35 @@ def editarproductos(request):
 			)
 
 @login_required(login_url='/')
+def editarprecios(request):
+	if request.method == 'POST':
+		try:
+			campo = 'Error precio sin id'
+			pid = request.POST.get('id')
+			precio = Precio.objects.get(id=pid)
+			campo = 'Debe ingresar precio a punto'
+			ppunto = float(request.POST.get('punto'))
+			campo = 'Debe ingresar precio a cliente'
+			pcliente = float(request.POST.get('cliente'))
+			campo = 'Debe ingresar descripcion del precio'
+			pdescripcion = request.POST.get('descripcion')
+			precio.punto= ppunto
+			precio.cliente = pcliente
+			precio.descripcion = pdescripcion
+			precio.save()
+			respuesta = "Precio editado correctamente."
+		except ValueError:
+			respuesta = "Error: "
+			respuesta =respuesta + campo
+		except Exception as ex:
+			respuesta = str(ex.message)
+		finally:
+			return HttpResponse(
+				json.dumps(respuesta),
+				content_type="application/json"
+			)
+
+@login_required(login_url='/')
 def agregarprecios(request):
 	if request.method == 'POST':
 		try:
@@ -295,3 +350,13 @@ def editarproducto(request, term):
 	categorias = Categoria.objects.all().order_by('nombre')
 	precios = Precio.objects.all().order_by('descripcion')
 	return render_to_response('productos/editar.html', {'producto':producto, 'categorias':categorias, 'precios':precios}, context_instance=RequestContext(request))
+
+@login_required(login_url='/')
+def editarprecio(request, term):
+	precio = Precio.objects.get(id = term)
+	return render_to_response('productos/precio_editar.html', {'precio':precio}, context_instance=RequestContext(request))
+
+@login_required(login_url='/')
+def editarcategoria(request, term):
+	categoria = Categoria.objects.get(id = term)
+	return render_to_response('productos/categoria_editar.html', {'categoria':categoria}, context_instance=RequestContext(request))

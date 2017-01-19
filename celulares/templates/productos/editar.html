@@ -73,7 +73,7 @@
 				type : "POST",
 				data : {'categoria':$('#categoria').val(), 'precio':$('#precio').val(), 'nombre':$('#nombre').val(), 'id':$('#id').val()},
 				success: function(respuesta){
-					if(respuesta == 'Producto registrado correctamente.')
+					if(respuesta == 'Producto editado correctamente.')
 					{
 						$('#productos-form')[0].reset();
 						$('#nombre').focus();

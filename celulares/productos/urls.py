@@ -18,8 +18,12 @@ urlpatterns = [
 	url(r'^productos/buscar$', buscarproducto.as_view(), name="buscarproducto"),
 	url(r'^categorias/buscar$', buscarcategoria.as_view(), name="categorias"),
 	url(r'^categorias/buscar-ajax$', buscarcategorias, name="buscarcategorias"),
+	url(r'^categorias/editar-ajax$', editarcategorias, name="buscarcategorias"),
 	url(r'^precios/buscar$', buscarprecio.as_view(), name="precios"),
 	url(r'^precios/buscar-ajax$', buscarprecios, name="buscarprecios"),
+	url(r'^precios/editar-ajax$', editarprecios, name="editarprecios"),
 	url(r'^precios/buscar2-ajax$', buscarprecios2, name="buscarprecios2"),
 	url(r'^productos/editar/(?P<term>[0-9]+)/$', editarproducto, name="editarproducto"),
+	url(r'^precios/editar/(?P<term>[0-9]+)/$', editarprecio, name="editarprecio"),
+	url(r'^categorias/editar/(?P<term>[0-9]+)/$', editarcategoria, name="editarcategoria"),
 ]
