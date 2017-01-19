@@ -1,5 +1,5 @@
 {% extends "base.html"%}
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
@@ -16,7 +16,7 @@
 		    	<select id="categoria">
 		    		<option value="" disabled selected>Seleccione categoria</option>
 		    		{% for categoria in categorias %}
-						<option value={{categoria.pk}}>{{categoria.nombre}}</option>	
+						<option value={{categoria.pk}}>{{categoria.nombre}}</option>
 		    		{% endfor %}
 		    	</select>
 		    	<label>Categorias</label>
@@ -27,7 +27,7 @@
 		    	<select id="precio">
 		    		<option value="" disabled selected>Seleccione precio</option>
 		    		{% for precio in precios %}
-						<option value={{precio.pk}}>{{precio.descripcion}}</option>	
+						<option value={{precio.pk}}>{{precio.descripcion}}</option>
 		    		{% endfor %}
 		    	</select>
 		    	<label>Precios</label>
@@ -50,19 +50,19 @@
 
 		$(document).ready(function() {
     		$('select').material_select();
-  		});	
+  		});
 
   		$('#productos-form').on('submit', function(event){
    			event.preventDefault();
     		agregar_producto();
 		});
-		
+
 		function agregar_producto(){
 			console.log('agregar producto funcionando');
 			$.ajax({
 				url : "agregar-ajax",
 				type : "POST",
-				data : {'categoria':$('#categoria').val(), 'precio':$('#precio').val(), 'nombre':$('#nombre').val()}, 
+				data : {'categoria':$('#categoria').val(), 'precio':$('#precio').val(), 'nombre':$('#nombre').val()},
 				success: function(respuesta){
 					if(respuesta == 'Producto registrado correctamente.')
 					{
@@ -72,7 +72,7 @@
 					Materialize.toast(respuesta, 5000);
 				}
 			});
-		};	
+		};
 
 	{% endblock %}
 </body>
