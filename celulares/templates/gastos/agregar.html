@@ -1,0 +1,79 @@
+{% extends "base.html"%}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>{% block title%}Agregar gastos{%endblock%}</title>
+</head>
+<body>
+	{% block titulo1 %}Agregar gastos{% endblock %}
+	{% block titulo %}Agregar gastos{% endblock %}
+	{%block contenido%}
+	<div class="row">
+	<form action="" method="POST" id="productos-form" class="col l12 m12 s12 ">
+		<div class="row">
+			<div class="input-field col l8 offset-l2 m8 offset-m2 s12">
+		    	<select id="categoria">
+		    		<option value="" disabled selected>Seleccione categoria</option>
+		    		{% for categoria in categorias %}
+						<option value={{categoria.pk}}>{{categoria.nombre}}</option>
+		    		{% endfor %}
+		    	</select>
+		    	<label>Categorias</label>
+		  	</div>
+	  	</div>
+	  	<div class="row">
+	  		<div class="input-field col l8 offset-l2 m8 offset-m2 s12">
+		    	<select id="precio">
+		    		<option value="" disabled selected>Seleccione precio</option>
+		    		{% for precio in precios %}
+						<option value={{precio.pk}}>{{precio.descripcion}}</option>
+		    		{% endfor %}
+		    	</select>
+		    	<label>Precios</label>
+		  	</div>
+	  	</div>
+	  	<div class="row">
+			<div class="input-field col l8 offset-l2 m8 offset-m2 s12">
+				<input id="nombre" name="nombre"type="text" class="
+				validate left-align ">
+				<label for="nombre">Nombre producto</label>
+			</div>
+		</div>
+		<div class="row col l4 offset-l6 m8 offset-m2 s4 offset-s8">
+			<button class="btn teal darken-4 waves-effect waves-light right" type="submit" name="action">Guardar<i class="material-icons right">send</i></button>
+		</div>
+	</form>
+	</div>
+	{%endblock%}
+	{% block script%}
+
+		$(document).ready(function() {
+    		$('select').material_select();
+  		});
+
+  		$('#productos-form').on('submit', function(event){
+   			event.preventDefault();
+    		agregar_producto();
+		});
+
+		function agregar_producto(){
+			console.log('agregar producto funcionando');
+			$.ajax({
+				url : "agregar-ajax",
+				type : "POST",
+				data : {'categoria':$('#categoria').val(), 'precio':$('#precio').val(), 'nombre':$('#nombre').val()},
+				success: function(respuesta){
+					if(respuesta == 'Producto registrado correctamente.')
+					{
+						$('#productos-form')[0].reset();
+						$('#nombre').focus();
+					}
+					Materialize.toast(respuesta, 5000);
+				}
+			});
+		};
+
+	{% endblock %}
+</body>
+</html>
