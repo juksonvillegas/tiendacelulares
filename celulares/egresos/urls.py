@@ -4,4 +4,5 @@ from .views import *
 urlpatterns = [
 	url(r'^egresos/agregar$', agregaregreso.as_view(), name="egresos"),
 	url(r'^egresos/agregar-ajax$', agregaregresos, name="agregar-egresos"),
+	url(r'^egresos/listar$', listaregresos, name="listaregresos"),
 ]

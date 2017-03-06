@@ -12,6 +12,7 @@ from .models import Egreso
 from django.db.models import Q
 from django.core import serializers
 from django.db.models import Sum
+from datetime import date
 
 # Create your views here.
 @method_decorator(login_required, name='dispatch')
@@ -35,5 +36,13 @@ def agregaregresos(request):
         finally:
             return HttpResponse(
                 json.dumps(respuesta),
-                content_type="application/json"
+				content_type="application/json"
                 )
+
+@login_required(login_url='/')
+def listaregresos(request):
+	try:
+		egresos = Egreso.objects.filter(fecha__date = date.today()).order_by('-fecha')
+		return render_to_response('egresos/listar.html', {'egresos':egresos}, context_instance=RequestContext(request))
+	except Venta.DoesNotExist:
+		return render_to_response('egresos/listar.html', context_instance=RequestContext(request))
