@@ -33,20 +33,18 @@ def agregarventas(request):
 			cliente = Cliente.objects.get(id = ccliente)
 			venta = Venta(cliente = cliente, documentado = ccdocumentado)
 			lista = request.POST.getlist('lista[]')
-			#venta.save()
+			venta.save()
 			for li in lista:
 				l = li.split(",")
 				p = Producto.objects.get(id = int(l[0]))
 				c = int(l[1])
 				precio = l[2]
-
 				if isfloat(precio):
 					print('precio sin s/.')
 					pr = float(precio)
 				else:
 					print('precio con s/.')
 					pr = float(precio[4:])
-
 				vd = Venta_detalle(venta=venta, producto=p, cantidad=c, precio=pr)
 				vd.save()
 			respuesta = "Venta registrada correctamente."
